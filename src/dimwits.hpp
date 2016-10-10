@@ -6,12 +6,6 @@
 #include <iostream>
 #include "boost/hana.hpp"
 
-#ifndef TEST_DIMWITS
-#define DOCTEST_CONFIG_DISABLE
-#endif
-
-#include "doctest.h"
-
 namespace dimwits{
 
 namespace hana = boost::hana;
@@ -34,8 +28,7 @@ template< typename T >
 auto address( T&& t ) { return &t; }
 
 #define NEW_TAG() ( true ? nullptr : address( [](){} ) )
-/**
- * The ternary condition is known at compile time so the address function
+/* The ternary condition is known at compile time so the address function is
  * never evaluated but the a unique type it supplies will be deduced for the 
  * ternary return type;
  */
@@ -52,9 +45,5 @@ auto address( T&& t ) { return &t; }
 #undef NEW_TAG
 
 }
-
-#ifdef DOCTEST_CONFIG_DISABLE
-#undef DOCTEST_CONFIG_DISABLE
-#endif
 
 #endif

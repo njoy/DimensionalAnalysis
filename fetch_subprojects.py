@@ -3,6 +3,7 @@
 A script to generate a flat subproject directory from a tree of dependency directories
 """
 import os
+import subprocess
 
 def dependency_directory():
   """
@@ -40,24 +41,27 @@ def traverse_dependencies( destination, traversed ):
   Clone and update dependencies uniquely and collect links to dependency projects
   in a destination folder
   """
-  if not os.isdir( dependency_directory() ):
-    os.chdir( ".." )
+  if not os.path.isdir( dependency_directory() ):
     return
   os.chdir( dependency_directory() )
+
   for dependency in os.listdir() :
     if os.path.isdir( dependency ) and not dependency in traversed :
         traversed.add( dependency )
         clone_submodule( dependency )
         os.chdir( dependency )
         update_repository()
-        os.symlink( os.getcwd(), os.path.join( destination, dependency ) )
+        if not os.path.isdir( os.path.join( destination, dependency ) ):
+          os.symlink( os.getcwd(), os.path.join( destination, dependency ) )
         traverse_dependencies( destination, traversed )
         os.chdir( ".." )
+  os.chdir( os.path.join( "..", ".." ) )
+  print( os.getcwd() )
 
 def collect_subprojects():
   destination = os.path.join( os.getcwd(), "subprojects" )
   if not os.path.isdir( destination ):
-    os.makedirs( directory )
+    os.makedirs( destination )
   traverse_dependencies( destination, set() )
 
 collect_subprojects()
