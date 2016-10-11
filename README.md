@@ -25,6 +25,9 @@ std::cout << "1 meter in feet is: " << myLength << std::endl;
 quantity::Type< Kilo<Gram> > myMass = 1.0 * mega(tonne);
 std::cout << "1 megatonne in kilograms is: " << myMass << std::endl;
 
+/* NIST values for common physical constants are provided */
+std::cout << "The speed of light is: " << constant::lightSpeed << std::endl;
+
 }
 ```
 
