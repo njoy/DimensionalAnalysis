@@ -1,7 +1,12 @@
+cache:
+  - "x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z"
+  
 environment:
   machine_user: test_user
   machine_pass: Pass@word1
-  mingw_directory: C:\mingw-w64\i686-5.3.0-posix-dwarf-rt_v4-rev0\mingw32\bin
+  mingw_url: "https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/6.2.0/threads-posix/seh/x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z/download"
+  mingw_archive: "x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z"
+  mingw_directory: mingw64
   CTEST_OUTPUT_ON_FAILURE: 1  
 
   matrix:
@@ -14,9 +19,11 @@ environment:
 install:
   - ps: net user /add $env:machine_user $env:machine_pass
   - ps: net localgroup administrators $env:machine_user /add
-
+  - if not exist "%mingw_archive%" appveyor DownloadFile "%mingw_url%" -FileName "%mingw_archive%"
+  - 7z x -y "%mingw_archive%" > nul
+    
 before_build:
-  - set Path=%mingw_directory%;%Path%
+  - set Path=%CD%\%mingw_directory%\bin;%Path%
   - g++ --version
   - mingw32-make --version
   - cmake --version
