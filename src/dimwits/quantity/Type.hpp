@@ -11,7 +11,7 @@ public:
   
   template< typename OtherUnit, typename OtherMagnitude >
   constexpr Type( const Type< OtherUnit, OtherMagnitude >& other ) :
-    value( conversion::factor< OtherUnit, Unit > * other.value ){};
+    value( conversion::factor< OtherUnit, Unit > * other.value ){}
   
   template< typename OtherMagnitude >
   constexpr Type( const Type< Unit, OtherMagnitude >& other ) :
@@ -31,7 +31,7 @@ public:
   
   template< typename OtherUnit, typename OtherMagnitude >
   constexpr Type( const Type< OtherUnit, OtherMagnitude >& other ) :
-    value( conversion::factor< OtherUnit, Unitless > * other.value ){};
+    value( conversion::factor< OtherUnit, Unitless > * other.value ){}
   
   template< typename OtherMagnitude >
   constexpr Type( const Type< Unitless, OtherMagnitude >& other ) :
