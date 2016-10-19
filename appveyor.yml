@@ -1,12 +1,12 @@
 cache:
-  - "x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z"
+  - "i686-6.2.0-release-posix-dwarf-rt_v5-rev1.7z"
   
 environment:
   machine_user: test_user
   machine_pass: Pass@word1
-  mingw_url: "https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/6.2.0/threads-posix/seh/x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z/download"
-  mingw_archive: "x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z"
-  mingw_directory: mingw64
+  mingw_url: "https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/6.2.0/threads-posix/dwarf/i686-6.2.0-release-posix-dwarf-rt_v5-rev1.7z/download"
+  mingw_archive: "i686-6.2.0-release-posix-dwarf-rt_v5-rev1.7z"
+  mingw_directory: mingw32
   CTEST_OUTPUT_ON_FAILURE: 1  
 
   matrix:
@@ -31,8 +31,8 @@ before_build:
   - ps: Get-Command sh.exe -All | Remove-Item
   - ps: new-item -Name build -ItemType directory
   - ps: cd build  
-  - cmake .. -G "MinGW Makefiles" -Dbuild_type=%BUILD_TYPE% -Dstatic_libraries=%STATIC_LIBRARIES%
-
+  - cmake .. -G "MinGW Makefiles" -Dbuild_type=%BUILD_TYPE% -Dstatic_libraries=%STATIC_LIBRARIES% -Dno_link_time_optimization=TRUE
+  
 build_script:
   - cmake --build . --use-stderr --target all -- -j%NUMBER_OF_PROCESSORS%
 
