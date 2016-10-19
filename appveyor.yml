@@ -25,9 +25,7 @@ install:
 before_build:
   - set Path=%CD%\%mingw_directory%\bin;%Path%
   - g++ --version
-  - mingw32-make --version
   - cmake --version
-  - ps: py -3 ./fetch_subprojects.py
   - ps: Get-Command sh.exe -All | Remove-Item
   - ps: new-item -Name build -ItemType directory
   - ps: cd build  
