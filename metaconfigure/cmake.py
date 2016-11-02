@@ -22,9 +22,9 @@ def fetch_subprojects( state ):
       """
       if( NOT ROOT_DIRECTORY )
           set( ROOT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
-          if ( NOT fetched_subprojects )
-              set( fetched_subprojects TRUE CACHE BOOL "fetch script ran")
-              execute_process( COMMAND python "./metaconfigure/fetch_subprojects.py"
+          if ( NOT no_fetched_subprojects )
+              set( no_fetched_subprojects TRUE CACHE BOOL "fetch script ran")
+              execute_process( COMMAND python3 "./metaconfigure/fetch_subprojects.py"
                                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
           endif()
       endif()
@@ -43,16 +43,13 @@ def set_build_type( state ):
              endif()
              set ( build_type "debug" )
          endif()
-      """)
-      if state['target'] == 'include':
-          contents += textwrap.dedent("""
-              if( NOT DEFINED {name}_build_type )
-                  if( VERBOSE )
-                      message( STATUS "{name}_build_type not specified")
-                      message( STATUS "{name}_build_type defaulted to value of build_type variable")
-                  endif()
-                  set( {name}_build_type "${{build_type}}" )
-              endif()
+         if( NOT DEFINED {name}_build_type )
+             if( VERBOSE )
+                 message( STATUS "{name}_build_type not specified")
+                 message( STATUS "{name}_build_type defaulted to value of build_type variable")
+             endif()
+             set( {name}_build_type "${{build_type}}" )
+          endif()
           """).format(**state)
   return contents
 
@@ -232,7 +229,8 @@ def add_targets( state ):
         contents += textwrap.dedent("""
             add_library( {name} ${{{name}_policy}}
                          {sources} )
-            foreach( flag IN LISTS ${name}_compiler_flags )
+            separate_arguments( {name}_compiler_flags_list UNIX_COMMAND "${{{name}_compiler_flags}}" )
+            foreach( flag IN LISTS {name}_compiler_flags_list )
                 target_compile_options( {name} PUBLIC ${{flag}} )
             endforeach( flag )           
             set_target_properties( {name} PROPERTIES LINK_FLAGS "${{{name}_compiler_flags}}" )""").format(**state, sources=sources)
@@ -243,7 +241,7 @@ def add_targets( state ):
                 target_include_directories( {name} PUBLIC ${{PROJECT_BINARY_DIRECTORY}} ) """).format(**state)
 
         if 'include_path' in state and state['include_path']:
-            contents += texwrap.dedent(
+            contents += textwrap.dedent(
                 """
                 target_include_directories( {name} PUBLIC {include_path} ) """).format(**state)
 
@@ -253,7 +251,7 @@ def add_targets( state ):
                 add_executable( {name}_executable {driver} )
                 
                 target_link_libraries( {name}_executable PUBLIC {name} )
-                foreach( flag IN LISTS ${name}_compiler_flags )
+                foreach( flag IN LISTS ${name}_compiler_flags_list )
                     target_compile_options( {name}_executable PUBLIC ${{flag}} )
                 endforeach( flag )           
                 set_target_properties( {name}_executable PROPERTIES LINK_FLAGS "${{{name}_compiler_flags}}" )
@@ -313,16 +311,16 @@ def add_unit_tests( state ):
             test_contents += textwrap.dedent(
                 """
                 set( test_flags ${{{name}_compiler_flags}} )
-                separate_arguments( test_flags )
-                foreach( flag IN LISTS test_flags )
+                separate_arguments( test_flags_list UNIX_COMMAND "${{test_flags}}" )
+                foreach( flag IN LISTS test_flags_list )
                     target_compile_options( {executable_name} PUBLIC ${{flag}} )
                 endforeach( flag )
-                set_target_properties( {executable_name} PROPERTIES LINK_FLAGS "${{{name}_compiler_flags}}" )
+                set_target_properties( {executable_name} PROPERTIES LINK_FLAGS "${{test_flags}}" )
                 target_link_libraries( {executable_name} PUBLIC {name} )
                 """.format(name=name, executable_name=executable_name))
             if os.path.isdir( os.path.join( directory, 'resources' ) ):
                 test_contents += 'file( GLOB resources "resources/*" ) \n'
-                test_contents += 'file( COPY "${{resources}}" DESTINATION "${{CMAKE_CURRENT_BINARY_DIR}}" ) \n'
+                test_contents += 'file( COPY "${resources}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}" ) \n'
             test_contents += 'add_test( NAME {} COMMAND {} ) \n'.format(test_name, executable_name)
             with open( os.path.join( directory, 'CMakeLists.txt' ), 'w') as TestCMakeFile:
                 TestCMakeFile.write( test_contents )
