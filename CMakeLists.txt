@@ -122,14 +122,20 @@ if( NOT is_subproject )
     endif()
 endif()
 
+if ( NOT GIT_EXECUTABLE )
+    find_package( Git )
+    if ( NOT GIT_FOUND )
+        message( FATAL_ERROR "git installation was not found." )
+    endif()
+endif()
 execute_process(
-    COMMAND git rev-parse --abbrev-ref HEAD
+    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     OUTPUT_VARIABLE GIT_BRANCH
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 execute_process(
-    COMMAND git rev-parse HEAD
+    COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     OUTPUT_VARIABLE GIT_HASH
     OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -155,11 +161,11 @@ target_link_libraries( dimwits INTERFACE catch-adapter INTERFACE hana-adapter )
 
 if( NOT is_subproject ) 
     enable_testing() 
-    add_subdirectory( src/dimwits/ratio/test ) 
-    add_subdirectory( src/dimwits/dimension/test ) 
-    add_subdirectory( src/dimwits/quantity/test ) 
-    add_subdirectory( src/dimwits/basis/test ) 
-    add_subdirectory( src/dimwits/scale/test ) 
     add_subdirectory( src/dimwits/conversion/test ) 
     add_subdirectory( src/dimwits/unit/test ) 
+    add_subdirectory( src/dimwits/quantity/test ) 
+    add_subdirectory( src/dimwits/basis/test ) 
+    add_subdirectory( src/dimwits/dimension/test ) 
+    add_subdirectory( src/dimwits/scale/test ) 
+    add_subdirectory( src/dimwits/ratio/test ) 
 endif() 

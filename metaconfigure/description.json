@@ -1,8 +1,6 @@
 {
-"is_external_project": false,
-"version": "0.0.1",
-"language_revision": "C++14",
-"language": "c++",
+"include_path": "src",
+"name": "dimwits",
 "header_files": [
 "src/dimwits.hpp",
 "src/dimwits/basis.hpp",
@@ -50,34 +48,28 @@
 "src/dimwits/unit/src/referenceUnit.hpp",
 "src/dimwits/unit/src/symbol.hpp"
 ],
-"name": "dimwits",
-"include_path": "src",
+"language_revision": "C++14",
 "implementation_files": [],
 "target": "include",
+"is_external_project": false,
+"version": "0.0.1",
+"language": "c++",
 "unit_tests": {
-"ratio": [
-"src/dimwits/ratio/test/add.test.cpp",
-"src/dimwits/ratio/test/divide.test.cpp",
-"src/dimwits/ratio/test/equality.test.cpp",
-"src/dimwits/ratio/test/greatestCommonFactor.test.cpp",
-"src/dimwits/ratio/test/less.test.cpp",
-"src/dimwits/ratio/test/make.test.cpp",
-"src/dimwits/ratio/test/multiply.test.cpp",
-"src/dimwits/ratio/test/ratio.test.cpp",
-"src/dimwits/ratio/test/reduce.test.cpp",
-"src/dimwits/ratio/test/subtract.test.cpp"
-],
 "dimension": [
 "src/dimwits/dimension/test/dimension.test.cpp",
 "src/dimwits/dimension/test/isBasis.test.cpp",
 "src/dimwits/dimension/test/operation.test.cpp"
 ],
+"unit": [
+"src/dimwits/unit/test/dimensionality.test.cpp",
+"src/dimwits/unit/test/isComposite.test.cpp",
+"src/dimwits/unit/test/referenceUnit.test.cpp",
+"src/dimwits/unit/test/symbol.test.cpp",
+"src/dimwits/unit/test/unit.test.cpp"
+],
 "quantity": [
 "src/dimwits/quantity/test/operations.test.cpp",
 "src/dimwits/quantity/test/quantity.test.cpp"
-],
-"basis": [
-"src/dimwits/basis/test/basis.test.cpp"
 ],
 "scale": [
 "src/dimwits/scale/test/dimensionality.test.cpp",
@@ -90,12 +82,20 @@
 "src/dimwits/conversion/test/conversion.test.cpp",
 "src/dimwits/conversion/test/factorValue.test.cpp"
 ],
-"unit": [
-"src/dimwits/unit/test/dimensionality.test.cpp",
-"src/dimwits/unit/test/isComposite.test.cpp",
-"src/dimwits/unit/test/referenceUnit.test.cpp",
-"src/dimwits/unit/test/symbol.test.cpp",
-"src/dimwits/unit/test/unit.test.cpp"
+"basis": [
+"src/dimwits/basis/test/basis.test.cpp"
+],
+"ratio": [
+"src/dimwits/ratio/test/add.test.cpp",
+"src/dimwits/ratio/test/divide.test.cpp",
+"src/dimwits/ratio/test/equality.test.cpp",
+"src/dimwits/ratio/test/greatestCommonFactor.test.cpp",
+"src/dimwits/ratio/test/less.test.cpp",
+"src/dimwits/ratio/test/make.test.cpp",
+"src/dimwits/ratio/test/multiply.test.cpp",
+"src/dimwits/ratio/test/ratio.test.cpp",
+"src/dimwits/ratio/test/reduce.test.cpp",
+"src/dimwits/ratio/test/subtract.test.cpp"
 ]
 }
 }
