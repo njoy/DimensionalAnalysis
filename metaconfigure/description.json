@@ -1,12 +1,14 @@
 {
+"implementation_files": [],
 "include_path": "src",
-"name": "dimwits",
+"version": "0.0.1",
 "header_files": [
 "src/dimwits.hpp",
 "src/dimwits/basis.hpp",
 "src/dimwits/constants.hpp",
 "src/dimwits/conversion.hpp",
 "src/dimwits/dimension.hpp",
+"src/dimwits/math.hpp",
 "src/dimwits/quantity.hpp",
 "src/dimwits/quantity.test.hpp",
 "src/dimwits/ratio.hpp",
@@ -48,17 +50,24 @@
 "src/dimwits/unit/src/referenceUnit.hpp",
 "src/dimwits/unit/src/symbol.hpp"
 ],
-"language_revision": "C++14",
-"implementation_files": [],
-"target": "include",
 "is_external_project": false,
-"version": "0.0.1",
-"language": "c++",
 "unit_tests": {
-"dimension": [
-"src/dimwits/dimension/test/dimension.test.cpp",
-"src/dimwits/dimension/test/isBasis.test.cpp",
-"src/dimwits/dimension/test/operation.test.cpp"
+"scale": [
+"src/dimwits/scale/test/dimensionality.test.cpp",
+"src/dimwits/scale/test/factor.test.cpp",
+"src/dimwits/scale/test/referenceUnitRatio.test.cpp",
+"src/dimwits/scale/test/scale.test.cpp",
+"src/dimwits/scale/test/symbol.test.cpp"
+],
+"basis": [
+"src/dimwits/basis/test/basis.test.cpp"
+],
+"math": [
+"src/dimwits/math/test/math.test.cpp"
+],
+"conversion": [
+"src/dimwits/conversion/test/conversion.test.cpp",
+"src/dimwits/conversion/test/factorValue.test.cpp"
 ],
 "unit": [
 "src/dimwits/unit/test/dimensionality.test.cpp",
@@ -71,19 +80,10 @@
 "src/dimwits/quantity/test/operations.test.cpp",
 "src/dimwits/quantity/test/quantity.test.cpp"
 ],
-"scale": [
-"src/dimwits/scale/test/dimensionality.test.cpp",
-"src/dimwits/scale/test/factor.test.cpp",
-"src/dimwits/scale/test/referenceUnitRatio.test.cpp",
-"src/dimwits/scale/test/scale.test.cpp",
-"src/dimwits/scale/test/symbol.test.cpp"
-],
-"conversion": [
-"src/dimwits/conversion/test/conversion.test.cpp",
-"src/dimwits/conversion/test/factorValue.test.cpp"
-],
-"basis": [
-"src/dimwits/basis/test/basis.test.cpp"
+"dimension": [
+"src/dimwits/dimension/test/dimension.test.cpp",
+"src/dimwits/dimension/test/isBasis.test.cpp",
+"src/dimwits/dimension/test/operation.test.cpp"
 ],
 "ratio": [
 "src/dimwits/ratio/test/add.test.cpp",
@@ -97,5 +97,9 @@
 "src/dimwits/ratio/test/reduce.test.cpp",
 "src/dimwits/ratio/test/subtract.test.cpp"
 ]
-}
+},
+"name": "dimwits",
+"language_revision": "C++14",
+"language": "c++",
+"target": "include"
 }

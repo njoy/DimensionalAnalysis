@@ -34,6 +34,7 @@ auto address( T&& t ) { return &t; }
  */
 
 #include "dimwits/ratio.hpp"
+#include "dimwits/math.hpp"
 #include "dimwits/basis.hpp"
 #include "dimwits/dimension.hpp"
 #include "dimwits/unit.hpp"

@@ -4,9 +4,9 @@ struct CompoundFunctor{
   template< typename Pair >
   constexpr double operator()( double compoundFactor, Pair pair ){
     auto pairFactor =
-      std::pow( unit::referenceUnitRatio
-                ( std::decay_t< decltype( hana::first( pair ) ) >{} ),
-                std::decay_t< decltype( hana::second( pair ) ) >{} );
+      math::Pow::evaluate( unit::referenceUnitRatio
+                           ( std::decay_t< decltype( hana::first( pair ) ) >{} ),
+                             std::decay_t< decltype( hana::second( pair ) ) >{} );
     return compoundFactor * pairFactor;
   }
 };   
@@ -28,6 +28,6 @@ constexpr double factorValue( unit::Type<From> from, unit::Type<To> to ){
 }
 
 template< typename From, typename To >
-const double factor = factorValue( From{}, To{} );
+constexpr double factor = factorValue( From{}, To{} );
 
 }
