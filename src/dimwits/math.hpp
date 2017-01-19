@@ -6,7 +6,8 @@ constexpr double e = 2.71828182845904523536028747135266249775724709369995;
 struct Exp{
 protected:
   template< typename T >
-  static constexpr T maclaurinSeries( x ){
+  static constexpr T maclaurinSeries( T x ){
+    const auto one = T(1);
     return
       (one + x *
        (one + x / ( 2 * one ) *
@@ -32,7 +33,6 @@ protected:
   
   template< typename T >
   static constexpr T implementation( T x, T state ){
-    const auto one = T(1);
     return
       ( x == T(0) ) ? state :
       ( x < -0.5 ) ? implementation( x + T(1), state / e<T> ) :
@@ -66,6 +66,7 @@ protected:
 
   template< typename T >
   static constexpr T mercatorSeries( T x ){
+    const auto one = T(1);
     return
       x / one *
       ( one - one * x / ( 2 * one ) *
