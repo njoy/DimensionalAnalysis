@@ -6,32 +6,37 @@ constexpr double e = 2.71828182845904523536028747135266249775724709369995;
 struct Exp{
 protected:
   template< typename T >
+  static constexpr T taylorSeries( x ){
+    (one + x *
+     (one + x / ( 2 * one ) *
+      (one + x / ( 3 * one ) *
+       (one + x / ( 4 * one ) *
+	(one + x / ( 5 * one ) *
+	 (one + x / ( 6 * one ) *
+	  (one + x / ( 7 * one ) *
+	   (one + x / ( 8 * one ) *
+	    (one + x / ( 9 * one ) *
+	     (one + x / ( 10 * one ) *
+	      (one + x / ( 11 * one ) *
+	       (one + x / ( 12 * one ) *
+		(one + x / ( 13 * one ) *
+		 (one + x / ( 14 * one ) *
+		  (one + x / ( 15 * one ) *
+		   (one + x / ( 16 * one ) *
+		    (one + x / ( 17 * one ) *
+		     (one + x / ( 18 * one )
+		       ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) );
+  }
+
+  
+  template< typename T >
   static constexpr T implementation( T x, T state ){
     const auto one = T(1);
     return
       ( x == T(0) ) ? state :
-      ( x > 0.5 ) ? implementation( x - T(1), state * e<T> ) :
       ( x < -0.5 ) ? implementation( x + T(1), state / e<T> ) :
-      state *
-      (one + x *
-        (one + x / ( 2 * one ) *
-          (one + x / ( 3 * one ) *
-  	    (one + x / ( 4 * one ) *
-	      (one + x / ( 5 * one ) *
-	        (one + x / ( 6 * one ) *
-	          (one + x / ( 7 * one ) *
-		    (one + x / ( 8 * one ) *
-		      (one + x / ( 9 * one ) *
-		        (one + x / ( 10 * one ) *
-		          (one + x / ( 11 * one ) *
-			    (one + x / ( 12 * one ) *
-			      (one + x / ( 13 * one ) *
-			        (one + x / ( 14 * one ) *
-			          (one + x / ( 15 * one ) *
-				    (one + x / ( 16 * one ) *
-				      (one + x / ( 17 * one ) *
-				        (one + x / ( 18 * one )
-				          ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) );
+      ( x <= 0.5 ) ? state * taylorSeries( x ) :
+      implementation( x - T(1), state * e<T> );      
   }
   
 public:
@@ -59,20 +64,25 @@ protected:
   }
 
   template< typename T >
+  static constexpr T mercatorSeries( T x ){
+    return
+      x / one *
+      ( one - one * x / ( 2 * one ) *
+	( one - ( 2 * one ) * x / ( 3 * one ) *
+	  ( one - ( 3 * one ) * x / ( 4 * one ) *
+	    ( one - ( 4 * one ) * x / ( 5 * one ) *
+	      ( one - ( 5 * one ) * x / ( 6 * one ) *
+		( one - ( 6 * one ) * x / ( 7 * one ) *
+		  ( one - ( 7 * one ) * x / ( 8 * one ) *
+		    ( one - ( 8 * one ) * x / ( 9 * one ) *
+		      ( one - ( 9 * one ) * x / ( 10 * one )
+			) ) ) ) ) ) ) ) );
+  }
+  
+  template< typename T >
   static constexpr T guess( T x ){
     const auto one = T(1);
-    const auto a = x - one;
-    return a / one *
-     ( one - one * a / ( 2 * one ) *
-       ( one - ( 2 * one ) * a / ( 3 * one ) *
- 	 ( one - ( 3 * one ) * a / ( 4 * one ) *
-	   ( one - ( 4 * one ) * a / ( 5 * one ) *
-	     ( one - ( 5 * one ) * a / ( 6 * one ) *
-	       ( one - ( 6 * one ) * a / ( 7 * one ) *
- 		 ( one - ( 7 * one ) * a / ( 8 * one ) *
-		   ( one - ( 8 * one ) * a / ( 9 * one ) *
-		     ( one - ( 9 * one ) * a / ( 10 * one )
-		       ) ) ) ) ) ) ) ) );
+    return mercatorSeries( x - one );
   }
   
   template< typename T >
@@ -81,7 +91,7 @@ protected:
     return
       ( x == 1 ) ? state :
       ( x < 0.5 ) ? implementation( one / x, state, not mode ) :
-      ( x < 1.5 ) ? state + (mode ? 1 : -1) * newtonRaphson( x, guess(x), 1000 ) :
+      ( x <= 1.5 ) ? state + (mode ? 1 : -1) * newtonRaphson( x, guess(x), 1000 ) :
       implementation( x / e<T>, state + (mode ? 1 : -1) * one, mode );
   }
   
