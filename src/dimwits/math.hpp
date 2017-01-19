@@ -7,25 +7,26 @@ struct Exp{
 protected:
   template< typename T >
   static constexpr T maclaurinSeries( x ){
-    (one + x *
-     (one + x / ( 2 * one ) *
-      (one + x / ( 3 * one ) *
-       (one + x / ( 4 * one ) *
-	(one + x / ( 5 * one ) *
-	 (one + x / ( 6 * one ) *
-	  (one + x / ( 7 * one ) *
-	   (one + x / ( 8 * one ) *
-	    (one + x / ( 9 * one ) *
-	     (one + x / ( 10 * one ) *
-	      (one + x / ( 11 * one ) *
-	       (one + x / ( 12 * one ) *
-		(one + x / ( 13 * one ) *
-		 (one + x / ( 14 * one ) *
-		  (one + x / ( 15 * one ) *
-		   (one + x / ( 16 * one ) *
-		    (one + x / ( 17 * one ) *
-		     (one + x / ( 18 * one )
-		       ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) );
+    return
+      (one + x *
+       (one + x / ( 2 * one ) *
+	(one + x / ( 3 * one ) *
+	 (one + x / ( 4 * one ) *
+	  (one + x / ( 5 * one ) *
+	   (one + x / ( 6 * one ) *
+	    (one + x / ( 7 * one ) *
+	     (one + x / ( 8 * one ) *
+	      (one + x / ( 9 * one ) *
+	       (one + x / ( 10 * one ) *
+		(one + x / ( 11 * one ) *
+		 (one + x / ( 12 * one ) *
+		  (one + x / ( 13 * one ) *
+		   (one + x / ( 14 * one ) *
+		    (one + x / ( 15 * one ) *
+		     (one + x / ( 16 * one ) *
+		      (one + x / ( 17 * one ) *
+		       (one + x / ( 18 * one )
+			 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) );
   }
 
   
