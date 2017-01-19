@@ -6,7 +6,7 @@ constexpr double e = 2.71828182845904523536028747135266249775724709369995;
 struct Exp{
 protected:
   template< typename T >
-  static constexpr T taylorSeries( x ){
+  static constexpr T maclaurinSeries( x ){
     (one + x *
      (one + x / ( 2 * one ) *
       (one + x / ( 3 * one ) *
@@ -35,7 +35,7 @@ protected:
     return
       ( x == T(0) ) ? state :
       ( x < -0.5 ) ? implementation( x + T(1), state / e<T> ) :
-      ( x <= 0.5 ) ? state * taylorSeries( x ) :
+      ( x <= 0.5 ) ? state * maclaurinSeries( x ) :
       implementation( x - T(1), state * e<T> );      
   }
   
