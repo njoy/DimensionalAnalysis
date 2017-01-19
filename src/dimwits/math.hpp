@@ -8,6 +8,7 @@ protected:
   template< typename T >
   static constexpr T maclaurinSeries( T x ){
     const auto one = T(1);
+    /* evaluated via Horner's method */
     return
       (one + x *
        (one + x / ( 2 * one ) *
@@ -37,7 +38,7 @@ protected:
       ( x == T(0) ) ? state :
       ( x < -0.5 ) ? implementation( x + T(1), state / e<T> ) :
       ( x <= 0.5 ) ? state * maclaurinSeries( x ) :
-      implementation( x - T(1), state * e<T> );      
+      implementation( x - T(1), state * e<T> ); 
   }
   
 public:
@@ -67,6 +68,7 @@ protected:
   template< typename T >
   static constexpr T mercatorSeries( T x ){
     const auto one = T(1);
+    /* evaluated via Horner's method */
     return
       x / one *
       ( one - one * x / ( 2 * one ) *

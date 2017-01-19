@@ -17,6 +17,8 @@ SCENARIO("log test"){
       1E7, 1E8, 1E9, 1E10, 1E11, 1E12, 1E15,
       1E18, 1E21, 1E24, 1E27, 1E30, 1E33,
       1E36, 1E39, 1E42 }};
+
+  constexpr auto myConstexpr = math::Log::evaluate(values[0]);
   
   for ( auto& value : values ) {
     auto trial = math::Log::evaluate(value);
