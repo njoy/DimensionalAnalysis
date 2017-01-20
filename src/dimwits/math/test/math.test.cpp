@@ -18,6 +18,7 @@ SCENARIO("log test"){
       1E18, 1E21, 1E24, 1E27, 1E30, 1E33,
       1E36, 1E39, 1E42 }};
 
+  double max = 0.0;
   constexpr auto myConstexpr = math::Log::evaluate(values[0]);
   
   for ( auto& value : values ) {
@@ -25,6 +26,50 @@ SCENARIO("log test"){
     const auto reference = std::log(value);
     const auto normalization = (std::log(value) == 0.0) ? 1.0 : reference;
     const auto error = std::abs( trial - reference );
-    REQUIRE( error / normalization < 1E-15 );
+    const auto relative = error / normalization;
+    REQUIRE( relative < 2E-16 );
+    max = ( relative > max ) ? relative : max;
   }
+
+  std::cout << "Log function max relative error: " << max << std::endl;
+}
+
+SCENARIO("exp test"){
+  constexpr std::array< double, 9 > values
+  {{ -85.0, -10.0, -5.0, -0.25, 0.0, 0.25, 5.0, 10.0, 88.0 }};
+
+  double max = 0.0;
+  constexpr auto myConstexpr = math::Exp::evaluate(values[0]);
+  
+  for ( auto& value : values ) {
+    auto trial = math::Exp::evaluate(value);
+    const auto reference = std::exp(value);
+    const auto error = std::abs( trial - reference );
+    const auto relative = error / reference;
+    REQUIRE( relative < 2E-16 );
+    max = ( relative > max ) ? relative : max;
+  }
+  std::cout << "Exp function max relative error: " << max << std::endl;
+}
+
+SCENARIO("pow test"){
+  constexpr std::array< long double, 7> bases
+  {{ 0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0 }};
+  constexpr std::array< long double, 9> powers
+  {{ -30.0, -10.0, -5.0, -0.25, 0.0, 0.25, 5.0, 10.0, 30.0 }};
+
+  double max = 0.0;
+  constexpr auto myConstexpr = math::Pow::evaluate( bases[0], powers[0] );
+
+  for (auto& base : bases ) {
+    for ( auto& power : powers ) {
+      auto trial = math::Pow::evaluate(base, power);
+      const auto reference = std::pow(base, power);
+      const auto error = std::abs( trial - reference );
+      const auto relative = error / reference;
+      REQUIRE( relative < 2E-16 );
+      max = ( relative > max ) ? relative : max;
+    }
+  }
+  std::cout << "Pow function max relative error: " << max << std::endl;
 }

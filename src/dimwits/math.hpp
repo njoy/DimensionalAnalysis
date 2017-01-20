@@ -1,13 +1,21 @@
 namespace math {
 
-template< typename T >
-constexpr double e = 2.71828182845904523536028747135266249775724709369995;
+/* This namespace provide for compile time evaluation of common 
+ * mathematical functions. While these functions can be called at runtime,
+ * the user is advised to prefer the standard library implementations
+ * for runtime evaluation.
+ */
+
+constexpr long double zero = (long double) 0;
+constexpr long double one = (long double) 1;
+constexpr long double two = (long double) 2;
+constexpr long double e = 2.718281828459045235360287471352662497757247093699959574966;
+constexpr long double exp2 = 7.389056098930650227230427460575007813180315570551847324087;
+constexpr long double ln2 = 0.693147180559945309417232121458176568075500134360255254120;
 
 struct Exp{
 protected:
-  template< typename T >
-  static constexpr T maclaurinSeries( T x ){
-    const auto one = T(1);
+  static constexpr long double maclaurinSeries( long double x ){
     /* evaluated via Horner's method */
     return
       (one + x *
@@ -31,20 +39,21 @@ protected:
 			 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) );
   }
 
+  static constexpr long double square( long double x ){
+    return x * x;
+  }
   
-  template< typename T >
-  static constexpr T implementation( T x, T state ){
+  static constexpr long double implementation( long double x ){
     return
-      ( x == T(0) ) ? state :
-      ( x < -0.5 ) ? implementation( x + T(1), state / e<T> ) :
-      ( x <= 0.5 ) ? state * maclaurinSeries( x ) :
-      implementation( x - T(1), state * e<T> ); 
+      ( x < -0.5 ) ?  one / implementation( -x ) :
+      ( x == zero ) ? one :
+      ( x <= 0.5 ) ? maclaurinSeries( x ) :
+      square( implementation( x / two ) );
   }
   
 public:
-  template< typename T >
-  static constexpr T evaluate( T x ){
-    return implementation( x, T(1) );
+  static constexpr long double evaluate( long double x ){
+    return implementation( x );
   }
 
   template< int64_t numerator, int64_t denominator >
@@ -56,8 +65,8 @@ public:
 struct Log {
 protected:
   
-  template< typename T >
-  static constexpr T newtonRaphson( T x, T y, int count ){
+  static constexpr long double
+  newtonRaphson( long double x, long double y, int count ){
     if ( count == 0 ){ return y; }
     const auto newY = y + ( x - Exp::evaluate(y) ) / ( x + Exp::evaluate(y) );
     auto difference = newY - y;
@@ -65,9 +74,7 @@ protected:
     return ( difference < 1.5E-16 ) ? newY : newtonRaphson( x, newY, count - 1 );
   }
 
-  template< typename T >
-  static constexpr T mercatorSeries( T x ){
-    const auto one = T(1);
+  static constexpr long double mercatorSeries( long double x ){
     /* evaluated via Horner's method */
     return
       x / one *
@@ -83,44 +90,54 @@ protected:
 			) ) ) ) ) ) ) ) );
   }
   
-  template< typename T >
-  static constexpr T guess( T x ){
-    const auto one = T(1);
+  static constexpr long double guess( long double x ){
     return mercatorSeries( x - one );
   }
   
-  template< typename T >
-  static constexpr T implementation( T x, T state, bool mode = true ){
-    constexpr auto one = T(1);
+  static constexpr long double implementation( long double x ){
     return
-      ( x == 1 ) ? state :
-      ( x < 0.5 ) ? implementation( one / x, state, not mode ) :
-      ( x <= 1.5 ) ? state + (mode ? 1 : -1) * newtonRaphson( x, guess(x), 1000 ) :
-      implementation( x / e<T>, state + (mode ? 1 : -1) * one, mode );
+      ( x == 1 ) ? zero :
+      ( x < 0.5 ) ? -implementation( one / x ) :
+      ( x <= 1.5 ) ? newtonRaphson( x, guess(x), 1000 ) :
+      implementation( x / two ) + ln2;
   }
   
 public:
-  template< typename T >
-  static constexpr T evaluate( T x ){
-    return implementation( x, T(0) );
-  }
-  
+  static constexpr long double evaluate( long double x ){
+    return implementation( x );
+  }  
 };
 
 struct Pow {
-public:
-  template< typename T >
-  static constexpr T evaluate( T base, T exponent ){
-    return
-      ( exponent == 0 ) ? T(1) :
-      ( base == 0 || base == 1 || exponent == 1 ) ? base :
-      Exp::evaluate( exponent * Log::evaluate(base) );
+protected:
+  static constexpr long double
+  implementation( long double base, int exponent ){
+    return 
+      ( exponent == zero ) ? one :
+      ( base == zero || base == one || exponent == one ) ? base :
+      implementation( base * base, exponent / 2 )
+      * implementation( base , exponent % 2 );
   }
 
-  template< typename T, int64_t numeratorRight, int64_t denominatorRight >
-  static constexpr T evaluate
-  ( T base, ratio::Type< numeratorRight, denominatorRight > exponent ){
-    return evaluate( base, T(double(exponent)) );
+  static constexpr long double
+  implementation( long double base, long double exponent ){
+    return Exp::evaluate( exponent * Log::evaluate( base ) );
+  }
+  
+public:
+  static constexpr long double
+  evaluate( long double base, long double exponent ){
+    if ( exponent < zero ){ return one / evaluate( base, -exponent ); }
+    const int integerExponent = exponent;
+    const long double fractionalExponent = exponent - integerExponent;      
+    return implementation( base, integerExponent )
+           * implementation( base, fractionalExponent );
+  }
+
+  template< int64_t numeratorRight, int64_t denominatorRight >
+  static constexpr long double evaluate
+  ( long double base, ratio::Type< numeratorRight, denominatorRight > exponent ){
+    return evaluate( base, (long double) double(exponent) );
   }
 };
 

@@ -16,17 +16,13 @@ TEST_CASE("factorValue"){
                                       Meter() * Newton() ) == 1.0 );
   }
 
-  auto tol = []( auto reference, auto trial ){
-    return std::abs( reference - trial ) / reference < 1E-15;
-  };
-  
   SECTION("Scaled"){
-    REQUIRE( tol( conversion::factorValue( Kilo<Meter>(), Meter() ), 1E3 ) );
-    REQUIRE( tol( conversion::factorValue( Meter(), Kilo<Meter>() ), 1E-3 ) );
-    REQUIRE( tol( conversion::factorValue( Kilo<Meter>() * Foot(),
-                                           Meter() * Foot() ), 1E3 ) );
-    REQUIRE( tol( conversion::factorValue( Meter() * Foot(),
-                                           Kilo<Meter>() * Foot() ), 1E-3 ) );
+    REQUIRE( conversion::factorValue( Kilo<Meter>(), Meter() ) == 1E3 );
+    REQUIRE( conversion::factorValue( Meter(), Kilo<Meter>() ) == 1E-3 );
+    REQUIRE( conversion::factorValue( Kilo<Meter>() * Foot(),
+                                      Meter() * Foot() ) == 1E3 );
+    REQUIRE( conversion::factorValue( Meter() * Foot(),
+                                      Kilo<Meter>() * Foot() ) == 1E-3 );
   }
   SECTION("Compound"){
     auto tol = []( auto reference, auto trial ){
