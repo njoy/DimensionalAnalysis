@@ -6,13 +6,13 @@ template< typename BaseUnit, typename Identifier >
 struct Template : hana::type< hana::tuple< BaseUnit, Identifier > >{};
 
 template< typename Prefix, typename T >
-auto primitive( Prefix, dimwits::unit::Primitive< T > ){
+constexpr auto primitive( Prefix, dimwits::unit::Primitive< T > ){
   static_assert( std::is_base_of<Tag, Prefix>::value, "" );
   return Template< dimwits::unit::Primitive< T >, Prefix >{};
 }
 
 template< typename Prefix, typename Definition >
-auto type( Prefix, dimwits::unit::Type< Definition > t ){
+constexpr auto type( Prefix, dimwits::unit::Type< Definition > t ){
   static_assert( not dimwits::unit::isComposite( t ), "" );
   auto definition = Definition{};
   auto unscaledPrimitive =
@@ -28,7 +28,7 @@ auto type( Prefix, dimwits::unit::Type< Definition > t ){
 #define DEFINE_SCALE( LABEL, VALUE, NAME, SYMBOL )                       \
   namespace scale {                                                      \
     struct LABEL : Tag {};                                               \
-    inline double factor( LABEL ){ return VALUE; }                       \
+    inline constexpr double factor( LABEL ){ return VALUE; }                       \
   }                                                                      \
                                                                          \
   template< typename T >                                                 \

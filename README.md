@@ -7,6 +7,7 @@ Minimal Example
 ----------------
 
 ```c++
+#include <iostream>
 #include "dimwits.hpp"
 
 using namespace dimwits;

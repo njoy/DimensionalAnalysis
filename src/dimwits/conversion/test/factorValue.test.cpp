@@ -15,6 +15,7 @@ TEST_CASE("factorValue"){
     REQUIRE( conversion::factorValue( Newton() * Meter(),
                                       Meter() * Newton() ) == 1.0 );
   }
+
   SECTION("Scaled"){
     REQUIRE( conversion::factorValue( Kilo<Meter>(), Meter() ) == 1E3 );
     REQUIRE( conversion::factorValue( Meter(), Kilo<Meter>() ) == 1E-3 );
@@ -24,8 +25,11 @@ TEST_CASE("factorValue"){
                                       Kilo<Meter>() * Foot() ) == 1E-3 );
   }
   SECTION("Compound"){
-    REQUIRE( conversion::factorValue( Slug() * Foot() / Hour(),
-                                      Gal() * Shake() * Tonne() ) ==
-             Approx(12356.1712) );
+    auto tol = []( auto reference, auto trial ){
+      return std::abs( reference - trial ) / reference < 1E-9;
+    };
+    REQUIRE( tol( conversion::factorValue( Slug() * Foot() / Hour(),
+                                           Gal() * Shake() * Tonne() ),
+		  12356.1712 ) );
   }
 }

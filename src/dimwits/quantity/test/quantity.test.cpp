@@ -31,4 +31,7 @@ SCENARIO("quantity Type"){
     quantity::Type< Unitless, int > integerBuckinghamPi = 5.0;
     REQUIRE( integerBuckinghamPi == 5 );
   }
+
+  using MilesPerSecond = decltype( Mile()/Second() );
+  constexpr Quantity< MilesPerSecond > fast = constant::lightSpeed;
 }

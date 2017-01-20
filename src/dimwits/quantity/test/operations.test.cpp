@@ -46,7 +46,7 @@ TEST_CASE("operations"){
 
     /* To get a more intuitive unit, a user need only ask */ 
     quantity::Type< decltype( Foot() * Foot() ) > area1 = area0;
-    REQUIRE( 1.0 == area1.value );
+    REQUIRE( std::abs( 1.0 - area1.value ) < 3E-16 );
   }
 
   SECTION("addition and subtraction"){
