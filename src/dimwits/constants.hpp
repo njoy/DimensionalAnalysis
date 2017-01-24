@@ -1,6 +1,7 @@
 namespace constant {
 
 constexpr auto boltzmann = 1.38064852E-23 * joule / kilo(gram);
+constexpr auto classicalElectronRadius = 2.8179403227E-15 * meter;
 constexpr auto conductanceQuantum = 7.7480917310E-5 * seimens;
 constexpr auto dirac = 1.054571800E-34 * joule * second;
 constexpr auto electric = 8.854187817E-12 * farad / meter;
