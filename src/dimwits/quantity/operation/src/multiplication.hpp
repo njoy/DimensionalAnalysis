@@ -10,21 +10,6 @@ constexpr auto operator*
   return returnQuantity;
 }
 
-// TEST_CASE( "quantity Type/Type multiplication" ){
-//   quantity::Type< Centi<Meter> > length0; length0.value = 2.0;
-//   quantity::Type< Centi<Meter> > length1; length1.value = 2.0;
-
-//   using m2 = decltype( Meter{} * Meter{} );
-//   using cm2 = decltype( Centi<Meter>{} * Centi<Meter>{} );
-  
-//   auto area0 = length0 * length1;
-//   REQUIRE( area0.value == doctest::Approx(4.0) );
-//   REQUIRE( hana::type_c< decltype(area0)::Units > == hana::type_c<cm2> );
-
-//   quantity::Type< m2 > area1 = length0 * length1;
-//   REQUIRE( area1.value == doctest::Approx(4E-4) );  
-// }
-
 template< typename Magnitude, typename Unit, typename T >
 constexpr auto operator*
 ( quantity::Type< Unit, Magnitude > partial, unit::Primitive<T> primitive ){

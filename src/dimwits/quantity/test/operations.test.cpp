@@ -49,6 +49,62 @@ TEST_CASE("operations"){
     REQUIRE( std::abs( 1.0 - area1.value ) < 3E-16 );
   }
 
+  SECTION("unary minus"){
+    quantity::Type< Centi<Meter> > length0 = 1.0 * meter;
+    auto length1 = -length0;
+    REQUIRE( -100.0 == length1.value );
+
+    auto generate_unit = decltype(length1)::Units();
+    REQUIRE( generate_unit == Centi<Meter>{} );
+  }
+
+  SECTION("unary plus"){
+    quantity::Type< Centi<Meter> > length0 = 1.0 * meter;
+    auto length1 = +length0;
+    REQUIRE( 100.0 == length1.value );
+
+    auto generate_unit = decltype(length1)::Units();
+    REQUIRE( generate_unit == Centi<Meter>{} );
+  }
+
+  SECTION("plus equals"){
+    SECTION("same unit"){
+      quantity::Type< Centi<Meter> > length = 1.0 * meter;
+      length += 1.0 * meter;
+      REQUIRE( 200.0 == length.value );
+
+      auto generate_unit = decltype(length)::Units();
+      REQUIRE( generate_unit == Centi<Meter>{} );
+    }
+    SECTION("different unit"){
+      quantity::Type< Centi<Meter> > length = 1.0 * meter;
+      length += 1.0 * centi(meter);
+      REQUIRE( 101.0 == length.value );
+
+      auto generate_unit = decltype(length)::Units();
+      REQUIRE( generate_unit == Centi<Meter>{} );
+    }
+  }
+
+  SECTION("minus equals"){
+    SECTION("same unit"){
+      quantity::Type< Centi<Meter> > length = 3.0 * meter;
+      length -= 1.0 * meter;
+      REQUIRE( 200.0 == length.value );
+
+      auto generate_unit = decltype(length)::Units();
+      REQUIRE( generate_unit == Centi<Meter>{} );
+    }
+    SECTION("different unit"){
+      quantity::Type< Centi<Meter> > length = 1.0 * meter;
+      length -= 1.0 * centi(meter);
+      REQUIRE( 99.0 == length.value );
+
+      auto generate_unit = decltype(length)::Units();
+      REQUIRE( generate_unit == Centi<Meter>{} );
+    }
+  }
+  
   SECTION("addition and subtraction"){
     /* In addition and subtraction, there is an choice to be made:
      * Given the left and right operand are expressed in differing units,
