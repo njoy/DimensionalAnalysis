@@ -47,6 +47,11 @@ TEST_CASE("operations"){
     /* To get a more intuitive unit, a user need only ask */ 
     quantity::Type< decltype( Foot() * Foot() ) > area1 = area0;
     REQUIRE( std::abs( 1.0 - area1.value ) < 3E-16 );
+
+    /* scalars can divided by quantity values */
+    auto inverse = 2.0 / area1;
+    REQUIRE( decltype(inverse)::Units() == Unitless() / Foot() / Foot() );
+    REQUIRE( inverse.value == Approx(2.0) );
   }
 
   SECTION("unary minus"){
