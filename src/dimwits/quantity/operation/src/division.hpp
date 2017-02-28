@@ -72,6 +72,6 @@ constexpr auto operator/
   using NewMagnitude = decltype( Factor{} / Magnitude{} );
   using NewUnit = decltype( pow(Unit{}, Ratio<-1> ) );
   quantity::Type< NewUnit, NewMagnitude > returnQuantity;
-  returnQuantity.value = right / left.value;
+  returnQuantity.value = left / right.value;
   return returnQuantity;
 }
