@@ -47,4 +47,5 @@ auto address( T&& t ) { return &t; }
 
 }
 
+#include "dimwits/numeric_limits.hpp"
 #endif
