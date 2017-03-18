@@ -47,6 +47,10 @@ TEST_CASE("operations"){
     /* To get a more intuitive unit, a user need only ask */ 
     quantity::Type< decltype( Foot() * Foot() ) > area1 = area0;
     REQUIRE( std::abs( 1.0 - area1.value ) < 3E-16 );
+
+    /* scalar values may appear on either side of division operator */
+    REQUIRE( std::abs( ( 10.0 / area0 - 10.0 / area1 ).value ) < 3E-16 );
+    REQUIRE( std::abs( ( area0 / 10.0 - area1 / 10.0 ).value ) < 3E-16 );
   }
 
   SECTION("unary minus"){
