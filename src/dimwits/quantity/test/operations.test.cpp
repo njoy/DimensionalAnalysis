@@ -52,6 +52,11 @@ TEST_CASE("operations"){
     auto inverse = 2.0 / area1;
     REQUIRE( decltype(inverse)::Units() == Unitless() / Foot() / Foot() );
     REQUIRE( inverse.value == Approx(2.0) );
+
+    /* or vice-versa */
+    auto otherInverse = area1 / 2.0;
+    REQUIRE( decltype(otherInverse)::Units() == Foot() * Foot() );
+    REQUIRE( std::abs( otherInverse.value ) == Approx(0.5) );
   }
 
   SECTION("unary minus"){
