@@ -178,9 +178,8 @@ TEST_CASE("operations"){
     auto length2 = 1.0 * angstroms;
 
     std::stringstream ss;
-    ss << length0 << ' ' << length1 << ' ' << length2 << ' '
-       << (length0 * length1 * length2);
-    REQUIRE( ss.str() == "1 ft  11 in  1 angstrom  11 angstrom in ft " );
+    ss << length0 << length1 << length2 << (length0 * length1 * length2);
+    REQUIRE( ss.str() == " 1 ft 11 in 1 angstrom 11 angstrom in ft" );
   }
 }
 
