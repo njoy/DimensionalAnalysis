@@ -1,5 +1,6 @@
 namespace constant {
 
+constexpr auto avogadro = 6.022140857E+23  / mole;
 constexpr auto boltzmann = 1.38064852E-23 * joule / kilo(gram);
 constexpr auto classicalElectronRadius = 2.8179403227E-15 * meter;
 constexpr auto conductanceQuantum = 7.7480917310E-5 * seimens;
