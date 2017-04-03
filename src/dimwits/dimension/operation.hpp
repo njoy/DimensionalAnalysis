@@ -31,3 +31,9 @@ template< typename Dimension, int64_t n, int64_t d >
 constexpr auto pow( Type< Dimension > t, ratio::Type< n, d > r ){
   return decltype( operation::exponentiation( t, r ) ){};
 }
+
+template< typename Dimension >
+constexpr auto sqrt( Type< Dimension > t ){
+  return decltype( operation::exponentiation( t, Ratio<1,2> ) ){};
+}
+

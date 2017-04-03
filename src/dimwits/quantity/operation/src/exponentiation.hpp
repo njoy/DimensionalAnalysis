@@ -16,3 +16,11 @@ constexpr auto pow( quantity::Type< Unit, Magnitude > base,
   returnQuantity.value = std::pow( base.value, r );
   return returnQuantity;
 }
+
+template< typename Magnitude, typename Unit >
+constexpr auto sqrt( quantity::Type< Unit, Magnitude > base ){
+  using NewUnit = decltype( pow( Unit{}, Ratio<1,2> ) );
+  quantity::Type< NewUnit, Magnitude > returnQuantity;
+  returnQuantity.value = std::sqrt( base.value );
+  return returnQuantity;
+}
