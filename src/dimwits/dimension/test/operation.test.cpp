@@ -39,4 +39,8 @@ TEST_CASE("operations"){
     REQUIRE( pow( dim::mass, Ratio<5,2> )
              == composite / pow( dim::mass, Ratio<1,2> ) );
   }
+
+  SECTION("sqrt is halfing the dimension power"){
+    REQUIRE( sqrt( pow( dim::mass, Ratio<3> ) ) == pow( dim::mass, Ratio<3,2> ) );
+  }
 }

@@ -246,3 +246,9 @@ TEST_CASE( "greater or equal operator"){
   REQUIRE( length3 >= length3 );
   REQUIRE( length3 >= length4 ); 
 }
+
+TEST_CASE( "exponentiation"){
+  auto length0 = 1.0 * meter;
+  REQUIRE( length0 * length0 == pow( length0, Ratio<2> ) );
+  REQUIRE( length0 == sqrt( pow( length0, Ratio<2> ) ) );
+}
