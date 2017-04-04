@@ -572,24 +572,22 @@ def generate():
     contents = "cmake_minimum_required( VERSION 3.2 ) \n"
     contents += fetch_subprojects( state )
     contents += project_statement( state )
-    if state['external project']:
+    if not state['is_external_project']:
         contents += compiler_minimum( state )
         contents += define_options( state )
         contents += make_aux_directories( state )
         
     contents += traverse_subprojects( state )
-    if state['external project']:
+    if not state['is_external_project']:
         contents += define_compiler_flags( state )
         contents += set_library_type( state )
         
     contents += collect_revision_info( state )
     contents += print_banner( state )
-    if state['external project']:
+    if not state['is_external_project']:
         contents += add_targets( state )
         contents += add_tests( state ) 
         contents += install( state )
-    else:
-        contents += "add_subdirectory(src)"
         
     with open('CMakeLists.txt', 'w') as CMakeFile:
         CMakeFile.write(contents)
