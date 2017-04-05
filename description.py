@@ -146,8 +146,10 @@ def generate(name, language, **kwargs):
              'is external project':False}
     state.update({'name':name, 'language':language})
     state.update(kwargs)
-    if 'initialized' not in state and not state['is external project']:
+    if 'initialized' not in state:
         state.update(configuration.languages[state['language']])
+        if state['is external project']:
+            state.pop('compiler')
         state['initialized'] = True
 
     state['project path'] = os.getcwd()
