@@ -159,5 +159,6 @@ def generate(name, language, **kwargs):
 
     os.chdir('src')
     evaluate_directory(state)
+    os.chdir('..')
     collect_driver(state)
     serialize(state)
