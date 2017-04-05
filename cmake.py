@@ -69,16 +69,16 @@ def has_tests(state):
 
 
 def project_statement(state):
-    project_language=language[state['language']]
-    contents="\nproject( {name} LANGUAGES {language} )".format(name=state['name'],
-                                                             language=project_language)
+    project_language = language[state['language']]
+    contents = "\nproject( {name} LANGUAGES {language} )".format(name=state['name'],
+                                                               language=project_language)
     contents += "\nget_directory_property( is_subproject PARENT_DIRECTORY )"
     contents += "\ninclude( CMakeDependentOption REQUIRED )"
-    subproject_languages_=subproject_languages(state)
-    if state['language'] in subproject_languages_:
-        subproject_languages_.remove(state['language'])
+    additional_languages = subproject_languages(state)
+    if state['language'] in additional_languages:
+        additional_languages.remove(state['language'])
 
-    for addition in subproject_languages_:
+    for addition in additional_languages:
         contents += "\nenable_language( {0} )".format(language[addition])
 
     return contents
@@ -120,12 +120,12 @@ def make_aux_directories(state):
     set( CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_BINARY_DIR}/fortran_modules" CACHE PATH "directory for fortran modules" )
     file( MAKE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}" ) """
 
-    contents=textwrap.dedent(contents) 
+    contents = textwrap.dedent(contents) 
     return contents
 
 
 def define_options(state):
-    if state['is_external_project']:
+    if state['is external project']:
         return ''
 
     contents="""
@@ -171,9 +171,9 @@ def define_options(state):
 
 def traverse_subprojects(state):
     contents=''
-    if state['subprojects'] and not state['is_external_project']:
+    if state['subprojects'] and not state['is external project']:
         contents += '\nget_directory_property( is_subproject PARENT_DIRECTORY )'
-        build_queue=description.reconstruct_build_queue(state)
+        build_queue = description.reconstruct_build_queue(state)
         build_queue.pop()
         for subproject in build_queue:
             contents += textwrap.dedent("""
@@ -444,7 +444,7 @@ endif()
 
 def add_tests(state):
     contents=''
-    if not state['is_external_project']:
+    if not state['is external project']:
         if has_tests(state):
             name=state['name']
             contents=""" 
@@ -591,7 +591,7 @@ def generate():
     contents = "cmake_minimum_required( VERSION 3.2 ) \n"
     contents += fetch_subprojects(state)
     contents += project_statement(state)
-    if not state['is_external_project']:
+    if not state['is external project']:
         contents += compiler_minimum(state)
         contents += define_options(state)
         contents += make_aux_directories(state)
@@ -601,7 +601,7 @@ def generate():
     contents += traverse_subprojects(state)
     contents += collect_revision_info(state)
     contents += print_banner(state)
-    if not state['is_external_project']:
+    if not state['is external project']:
         contents += add_targets(state)
         contents += add_tests(state) 
         contents += install(state)

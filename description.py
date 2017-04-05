@@ -139,8 +139,9 @@ def collect_driver(state):
         return
 
 
-def generate(name, language, is_external_project=False, **kwargs):
-    state = locals()
+def generate(name, language, **kwargs):
+    state = {'strict':True, 'test pattern':'^test$', 'external project':True}
+    state.update(locals())
     state.update(state.pop('kwargs'))
     if 'initialized' not in state:
         state.update(configuration.languages[state['language']])
@@ -149,14 +150,8 @@ def generate(name, language, is_external_project=False, **kwargs):
     state['project path'] = os.getcwd()
     state['tests'] = {}
     state['subprojects'] = {}
-    if 'strict' not in state:
-        strict = True
-
-    if not 'test_pattern' in state:
-        state['test_pattern'] = '^test$'
-
     if 'update' not in state:
-        state['update'] = not state['is_external_project']
+        state['update'] = not state['is external project']
 
     for group in state['file extension']:
         state[group] = []
