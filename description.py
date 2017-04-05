@@ -142,8 +142,8 @@ def collect_driver(state):
 def generate(name, language, **kwargs):
     state = {'strict':True, 'test pattern':'^test$', 'ignore pattern':'',
              'external project':False}
-    state.update(locals())
-    state.update(state.pop('kwargs'))
+    state.update({'name':name, 'language':language})
+    state.update(kwargs)
     if 'initialized' not in state:
         state.update(configuration.languages[state['language']])
         state['initialized'] = True
