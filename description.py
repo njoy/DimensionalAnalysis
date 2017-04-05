@@ -120,9 +120,9 @@ def evaluate_directory(state):
     for name in os.listdir(os.getcwd()):
         if os.path.isdir(os.path.join(os.getcwd(), name)):
             os.chdir(name)
-            if re.match(name, state['test_pattern']):
+            if re.match(name, state['test pattern']):
                 evaluate_test_directory(state)
-            else:
+            elif not re.match(name, state['ignore pattern']):
                 evaluate_directory(state)
 
     os.chdir('..')
@@ -140,7 +140,8 @@ def collect_driver(state):
 
 
 def generate(name, language, **kwargs):
-    state = {'strict':True, 'test pattern':'^test$', 'external project':True}
+    state = {'strict':True, 'test pattern':'^test$', 'ignore pattern':'',
+             'external project':False}
     state.update(locals())
     state.update(state.pop('kwargs'))
     if 'initialized' not in state:
