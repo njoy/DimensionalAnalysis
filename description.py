@@ -94,6 +94,7 @@ def evaluate_test_directory(state):
     else:
         name = state['name']
 
+    directory = relative_path(state)
     files = []
     for extension in state['file extension']['implementation files']:
         filenames = glob.glob('*.' + extension)
