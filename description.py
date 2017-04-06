@@ -121,8 +121,8 @@ def evaluate_directory(state):
     for name in os.listdir(os.getcwd()):
         if os.path.isdir(os.path.join(os.getcwd(), name)):
             os.chdir(name)
-            if not re.match(name, state['ignore pattern']):
-                if re.match(name, state['test pattern']):
+            if not re.match(state['ignore pattern'], name):
+                if re.match(state['test pattern'], name):
                     evaluate_test_directory(state)
                 else:
                     evaluate_directory(state)
