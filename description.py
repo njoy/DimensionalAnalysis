@@ -124,7 +124,7 @@ def evaluate_directory(state):
             if not re.match(name, state['ignore pattern']):
                 if re.match(name, state['test pattern']):
                     evaluate_test_directory(state)
-                elif:
+                else:
                     evaluate_directory(state)
             else:
                 os.chdir('..')
