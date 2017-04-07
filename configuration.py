@@ -98,9 +98,10 @@ languages['c++']['compiler']['g++']['osx'] = copy.deepcopy( languages['c++']['co
 languages['c++']['compiler']['g++']['osx']['flags']['common'] = []
 languages['c++']['compiler']['g++']['windows'] = languages['c++']['compiler']['g++']['linux']
 
-languages['c++']['compiler']['llvm clang++']['linux'] = ['-stdlib=libstdc++']
-languages['c++']['compiler']['llvm clang++']['osx'] = ['-stdlib=libc++']
-languages['c++']['compiler']['llvm clang++']['windows'] = languages['c++']['compiler']['g++']['osx']
+languages['c++']['compiler']['llvm clang++'] = copy.deepcopy( languages['c']['compiler']['gcc'])
+languages['c++']['compiler']['llvm clang++']['linux']['flags']['common'] = ['-stdlib=libstdc++']
+languages['c++']['compiler']['llvm clang++']['osx']['flags']['common'] = ['-stdlib=libc++']
+languages['c++']['compiler']['llvm clang++']['windows'] = languages['c++']['compiler']['llvm clang++']['osx']
 
 languages['c++']['compiler']['apple clang++']['osx'] = languages['c++']['compiler']['llvm clang++']['osx']
 
