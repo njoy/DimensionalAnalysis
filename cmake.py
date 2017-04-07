@@ -545,7 +545,6 @@ def install(state):
 
             contents += """
         install( DIRECTORY {include_path} DESTINATION include
-                 FILES_MATCHING REGEX "{regex}"
                  FILE_PERMISSIONS OWNER_READ OWNER_WRITE 
                                   GROUP_READ 
                                   WORLD_READ
@@ -555,6 +554,10 @@ def install(state):
             if "group id" in state:
                 contents += """
                 SETGID {gid}"""
+
+
+            contents +=     """
+                 FILES_MATCHING REGEX "{regex}" """
 
             contents += """ )
                 """
