@@ -457,7 +457,7 @@ def add_tests(state):
                 if ( unit_tests )"""
                 for test_name, sources in state['tests'].items():
                     executable_name=test_name + '.test'
-                    directory=sources[0]
+                    directory=os.path.dirname(sources[0])
                     contents += """
                     add_subdirectory( {} )""".format(directory)
                     test_contents="""
