@@ -13,7 +13,7 @@ languages['fortran']['standards'] = ['fortran77', 'fortran90', 'fortran95', 'for
 languages['c']['file extension']['implementation files'] = ['c']
 languages['c']['file extension']['header files'] = ['h']
 languages['c++']['file extension']['implementation files'] = ['c++', 'cxx', 'cpp', 'cc']
-languages['c++']['file extension']['header files'] = ['h++', 'hxx', 'hpp', 'hh']
+languages['c++']['file extension']['header files'] = ['h++', 'hxx', 'hpp', 'hh', 'h']
 languages['fortran']['file extension']['implementation files'] = ['f', 'for', 'f90']
     
 languages['c']['compiler']['gcc'] = {'minimum version' : '6.2'}
