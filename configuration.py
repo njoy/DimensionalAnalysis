@@ -93,15 +93,15 @@ languages['c']['compiler']['gcc']['linux']['flags']['profile use'] = ["-fprofile
 languages['fortran']['compiler']['gfortran']['linux']['flags']['profile use'] = languages['c']['compiler']['gcc']['linux']['flags']['profile use']
 
 languages['c++']['compiler']['g++']['linux']['flags'] = copy.deepcopy( languages['c']['compiler']['gcc']['linux']['flags'] )
-languages['c++']['compiler']['g++']['linux']['flags']['common'] = ['-stdlib=libstdc++']
+languages['c++']['compiler']['g++']['linux']['flags']['common'] = []
 languages['c++']['compiler']['g++']['osx'] = copy.deepcopy( languages['c++']['compiler']['g++']['linux'] )
-languages['c++']['compiler']['g++']['osx']['flags']['common'] = ['-stdlib=libc++']
+languages['c++']['compiler']['g++']['osx']['flags']['common'] = []
 languages['c++']['compiler']['g++']['windows'] = languages['c++']['compiler']['g++']['linux']
 
-languages['c++']['compiler']['llvm clang++']['linux'] = languages['c++']['compiler']['g++']['linux']
-languages['c++']['compiler']['llvm clang++']['osx'] = languages['c++']['compiler']['g++']['osx']
+languages['c++']['compiler']['llvm clang++']['linux'] = ['-stdlib=libstdc++']
+languages['c++']['compiler']['llvm clang++']['osx'] = ['-stdlib=libc++']
 languages['c++']['compiler']['llvm clang++']['windows'] = languages['c++']['compiler']['g++']['osx']
 
-languages['c++']['compiler']['apple clang++']['osx'] = languages['c++']['compiler']['g++']['osx']
+languages['c++']['compiler']['apple clang++']['osx'] = languages['c++']['compiler']['llvm clang++']['osx']
 
 
