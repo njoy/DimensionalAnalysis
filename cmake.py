@@ -289,7 +289,7 @@ def test_flags_expression(state):
     debug=template.format('DEBUG')
     release=template.format('RELEASE')
         
-    option_template="\n$<$<BOOL:${{{{{0}}}}}>:${{{{{{PREFIX}}}}_{0}_flags}}}}}}>"
+    option_template="\n$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
     strict=option_template.format('strict')
     link_time_optimization=option_template.format('link_time_optimization')
     nonportable_optimization=option_template.format('nonportable_optimization')
