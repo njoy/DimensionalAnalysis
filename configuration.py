@@ -16,13 +16,13 @@ languages['c++']['file extension']['implementation files'] = ['c++', 'cxx', 'cpp
 languages['c++']['file extension']['header files'] = ['h++', 'hxx', 'hpp', 'hh', 'h']
 languages['fortran']['file extension']['implementation files'] = ['f', 'for', 'f90']
     
-languages['c']['compiler']['gcc'] = {'minimum version' : '6.2'}
-languages['c']['compiler']['llvm clang'] = {'minimum version' : '3.8'}
-languages['c']['compiler']['apple clang'] = {'minimum version' : '8.0'}
-languages['c++']['compiler']['g++'] = {'minimum version' : '6.2'}
-languages['c++']['compiler']['llvm clang++'] = {'minimum version' : '3.8'}
-languages['c++']['compiler']['apple clang++'] = {'minimum version' : '8.0'}
-languages['fortran']['compiler']['gfortran'] = {'minimum version' : '5.1'}
+languages['c']['compiler']['gcc'] = {}
+languages['c']['compiler']['llvm clang'] = {}
+languages['c']['compiler']['apple clang'] = {}
+languages['c++']['compiler']['g++'] = {}
+languages['c++']['compiler']['llvm clang++'] = {}
+languages['c++']['compiler']['apple clang++'] = {}
+languages['fortran']['compiler']['gfortran'] = {}
 
 languages['c']['compiler']['gcc']['linux'] = {}
 languages['c']['compiler']['gcc']['osx'] = languages['c']['compiler']['gcc']['linux']
@@ -93,16 +93,22 @@ languages['c']['compiler']['gcc']['linux']['flags']['profile use'] = ["-fprofile
 languages['fortran']['compiler']['gfortran']['linux']['flags']['profile use'] = languages['c']['compiler']['gcc']['linux']['flags']['profile use']
 
 languages['c++']['compiler']['g++']['linux']['flags'] = copy.deepcopy( languages['c']['compiler']['gcc']['linux']['flags'] )
-languages['c++']['compiler']['g++']['linux']['flags']['common'] = []
 languages['c++']['compiler']['g++']['osx'] = copy.deepcopy( languages['c++']['compiler']['g++']['linux'] )
-languages['c++']['compiler']['g++']['osx']['flags']['common'] = []
 languages['c++']['compiler']['g++']['windows'] = languages['c++']['compiler']['g++']['linux']
 
-languages['c++']['compiler']['llvm clang++'] = copy.deepcopy( languages['c']['compiler']['gcc'])
+languages['c++']['compiler']['llvm clang++'] = copy.deepcopy( languages['c++']['compiler']['g++'])
 languages['c++']['compiler']['llvm clang++']['linux']['flags']['common'] = ['-stdlib=libstdc++']
+languages['c++']['compiler']['llvm clang++']['linux']['flags']['debug'].remove('-fsignaling-nans')
+languages['c++']['compiler']['llvm clang++']['linux']['flags']['debug'].remove('-frounding-math')
 languages['c++']['compiler']['llvm clang++']['osx']['flags']['common'] = ['-stdlib=libc++']
 languages['c++']['compiler']['llvm clang++']['windows'] = languages['c++']['compiler']['llvm clang++']['osx']
 
 languages['c++']['compiler']['apple clang++']['osx'] = languages['c++']['compiler']['llvm clang++']['osx']
 
-
+languages['c']['compiler']['gcc']['minimum version'] = '6.2'
+languages['c']['compiler']['llvm clang'] ['minimum version'] = '3.8'
+languages['c']['compiler']['apple clang']['minimum version'] = '8.0'
+languages['c++']['compiler']['g++']['minimum version'] = '6.2'
+languages['c++']['compiler']['llvm clang++']['minimum version'] = '3.8'
+languages['c++']['compiler']['apple clang++']['minimum version'] = '8.0'
+languages['fortran']['compiler']['gfortran']['minimum version'] = '5.1'
