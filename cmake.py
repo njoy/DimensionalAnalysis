@@ -370,7 +370,7 @@ def link_dependencies(state):
     if len(state['subprojects']) > 0 :
         contents += '\ntarget_link_libraries( {name}'
         for name, subproject in state['subprojects'].items():
-            contents += (' INTERFACE {}' if has_library(subproject) else ' PUBLIC {}').format(name)
+            contents += (' PUBLIC {}' if has_library(subproject) else ' INTERFACE {}').format(name)
 
         contents += ' )\n'
 
