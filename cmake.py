@@ -290,12 +290,13 @@ def test_flags_expression(state):
     release = template.format('RELEASE')
         
     option_template = "\n$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
+    strict = option_template.format('coverage')
     strict = option_template.format('strict')
     link_time_optimization = option_template.format('link_time_optimization')
     nonportable_optimization = option_template.format('nonportable_optimization')
         
     addition = common + strict \
-                + "$<$<CONFIG:DEBUG>:\n" + debug + '>' \
+                + "$<$<CONFIG:DEBUG>:\n" + debug + coverage + '>' \
                 + "\n$<$<CONFIG:RELEASE>:\n" + release + link_time_optimization + nonportable_optimization + ">\n"
     contents += addition.format(language=language[state['language']], name=state['name'])
         
