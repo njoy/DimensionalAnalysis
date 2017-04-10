@@ -101,7 +101,7 @@ languages['c++']['compiler']['llvm clang++']['linux']['flags']['common'] = ['-st
 languages['c++']['compiler']['llvm clang++']['linux']['flags']['debug'].remove('-fsignaling-nans')
 languages['c++']['compiler']['llvm clang++']['linux']['flags']['debug'].remove('-frounding-math')
 
-languages['c++']['compiler']['llvm clang++']['osx']['flags'] = languages['c++']['compiler']['llvm clang++']['linux']['flags']
+languages['c++']['compiler']['llvm clang++']['osx']['flags'] = copy.deepcopy(languages['c++']['compiler']['llvm clang++']['linux']['flags'])
 languages['c++']['compiler']['llvm clang++']['osx']['flags']['common'] = ['-stdlib=libc++']
 languages['c++']['compiler']['llvm clang++']['windows'] = languages['c++']['compiler']['llvm clang++']['osx']
 

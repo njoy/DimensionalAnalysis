@@ -229,18 +229,18 @@ def define_compiler_flags(state):
 
 
 def lto_flags_expression(state):
-    contents=""
-    release="${{${{PREFIX}}_RELEASE_flags}}".format(language=language[state['language']], name=state['name'])
-    link_time_optimization="${{${{PREFIX}}_link_time_optimization_flags}}".format(language=language[state['language']], name=state['name'])
-    option_template="$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
+    contents = ""
+    release = "${{${{PREFIX}}_RELEASE_flags}}".format(language=language[state['language']], name=state['name'])
+    link_time_optimization = "${{${{PREFIX}}_link_time_optimization_flags}}".format(language=language[state['language']], name=state['name'])
+    option_template = "$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
 
-    profile_generate=option_template.format('profile_generate').format(language=language[state['language']], name=state['name'])
-    profile_use=option_template.format('profile_use').format(language=language[state['language']], name=state['name'])
-    nonportable_optimization=option_template.format('nonportable_optimization').format(language=language[state['language']], name=state['name'])
-    language_appended_flags="$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(language[state['language']])
-    project_appended_flags="$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(state['name'])
-    contents=   "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}{language_appended_flags}{project_appended_flags}>\""
-    contents=contents.format(release=release,
+    profile_generate = option_template.format('profile_generate').format(language=language[state['language']], name=state['name'])
+    profile_use = option_template.format('profile_use').format(language=language[state['language']], name=state['name'])
+    nonportable_optimization = option_template.format('nonportable_optimization').format(language=language[state['language']], name=state['name'])
+    language_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(language[state['language']])
+    project_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(state['name'])
+    contents = "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}>{language_appended_flags}{project_appended_flags}\""
+    contents = contents.format(release=release,
                                link_time_optimization=link_time_optimization,
                                profile_generate=profile_generate,
                                profile_use=profile_use,
@@ -283,18 +283,18 @@ def target_flags_expression(state):
 
 
 def test_flags_expression(state):
-    contents=''
-    template="${{{{${{{{PREFIX}}}}_{0}_flags}}}}"
-    common=template.format('common')
-    debug=template.format('DEBUG')
-    release=template.format('RELEASE')
+    contents = ''
+    template = "${{{{${{{{PREFIX}}}}_{0}_flags}}}}"
+    common = template.format('common')
+    debug = template.format('DEBUG')
+    release = template.format('RELEASE')
         
-    option_template="\n$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
-    strict=option_template.format('strict')
-    link_time_optimization=option_template.format('link_time_optimization')
-    nonportable_optimization=option_template.format('nonportable_optimization')
+    option_template = "\n$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
+    strict = option_template.format('strict')
+    link_time_optimization = option_template.format('link_time_optimization')
+    nonportable_optimization = option_template.format('nonportable_optimization')
         
-    addition= common + strict \
+    addition = common + strict \
                 + "$<$<CONFIG:DEBUG>:\n" + debug + '>' \
                 + "\n$<$<CONFIG:RELEASE>:\n" + release + link_time_optimization + nonportable_optimization + ">\n"
     contents += addition.format(language=language[state['language']], name=state['name'])
@@ -416,10 +416,11 @@ set( PREFIX {name}_${{CMAKE_{language}_COMPILER_ID}}_${{CMAKE_SYSTEM_NAME}} )
     if has_library(state):
         contents += """
 target_compile_options( {name} PRIVATE {compile_flags} )
-
-target_link_libraries( {name} PUBLIC {link_flags} )
         """
 
+    contents += """
+target_link_libraries( {name} {policy} {link_flags} )
+    """
     contents += link_dependencies(state)
         
     if has_executable(state):
@@ -538,7 +539,7 @@ def install(state):
         """
 
     regex=[]
-    if 'include path' in state and is_subdirectory(state['include path'], os.cwd()):
+    if 'include path' in state and is_subdirectory(state['include path'], os.getcwd()):
         if 'header files' in state['file extension']:
             for extension in state['file extension']['header files']:
                 regex.append(".*\.{0}".format(extension))                
