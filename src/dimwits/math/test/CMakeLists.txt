@@ -2,7 +2,8 @@
 add_executable( dimwits.math.test math.test.cpp )
 target_compile_options( dimwits.math.test PRIVATE ${${PREFIX}_common_flags}
 $<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>$<$<CONFIG:DEBUG>:
-${${PREFIX}_DEBUG_flags}>
+${${PREFIX}_DEBUG_flags}
+$<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags}>>
 $<$<CONFIG:RELEASE>:
 ${${PREFIX}_RELEASE_flags}
 $<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}>
