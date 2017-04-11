@@ -20,7 +20,7 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]; then
   fi; 
 fi
 
-./fetch_subprojects.py
+./metaconfigure/fetch_subprojects.py
 mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=$build_type \
