@@ -237,14 +237,16 @@ def lto_flags_expression(state):
     profile_generate = option_template.format('profile_generate').format(language=language[state['language']], name=state['name'])
     profile_use = option_template.format('profile_use').format(language=language[state['language']], name=state['name'])
     nonportable_optimization = option_template.format('nonportable_optimization').format(language=language[state['language']], name=state['name'])
+    coverage = option_template.format('coverage').format(language=language[state['language']], name=state['name'])
     language_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(language[state['language']])
     project_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(state['name'])
-    contents = "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}>{language_appended_flags}{project_appended_flags}\""
+    contents = "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}>$<$<AND:$<CONFIG:DEBUG>,$<BOOL:${{coverage}}>>:{coverage}>{language_appended_flags}{project_appended_flags}\""
     contents = contents.format(release=release,
                                link_time_optimization=link_time_optimization,
                                profile_generate=profile_generate,
                                profile_use=profile_use,
                                nonportable_optimization=nonportable_optimization,
+                               coverage=coverage,
                                language_appended_flags=language_appended_flags,
                                project_appended_flags=project_appended_flags)
 
@@ -290,12 +292,13 @@ def test_flags_expression(state):
     release = template.format('RELEASE')
         
     option_template = "\n$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
+    coverage = option_template.format('coverage')
     strict = option_template.format('strict')
     link_time_optimization = option_template.format('link_time_optimization')
     nonportable_optimization = option_template.format('nonportable_optimization')
         
     addition = common + strict \
-                + "$<$<CONFIG:DEBUG>:\n" + debug + '>' \
+                + "$<$<CONFIG:DEBUG>:\n" + debug + coverage + '>' \
                 + "\n$<$<CONFIG:RELEASE>:\n" + release + link_time_optimization + nonportable_optimization + ">\n"
     contents += addition.format(language=language[state['language']], name=state['name'])
         
