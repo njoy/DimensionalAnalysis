@@ -1,7 +1,7 @@
 {
   "compiler": {
     "apple clang++": {
-      "minimum version": "8.0",
+      "minimum version": "7.0",
       "osx": {
         "flags": {
           "base project": [],

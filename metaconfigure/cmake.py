@@ -230,17 +230,17 @@ def define_compiler_flags(state):
 
 def lto_flags_expression(state):
     contents = ""
-    release = "${{${{PREFIX}}_RELEASE_flags}}".format(language=language[state['language']], name=state['name'])
+    release = "${{${{PREFIX}}_RELEASE_flags}};".format(language=language[state['language']], name=state['name'])
     link_time_optimization = "${{${{PREFIX}}_link_time_optimization_flags}}".format(language=language[state['language']], name=state['name'])
-    option_template = "$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
+    option_template = "$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}};>"
 
     profile_generate = option_template.format('profile_generate').format(language=language[state['language']], name=state['name'])
     profile_use = option_template.format('profile_use').format(language=language[state['language']], name=state['name'])
     nonportable_optimization = option_template.format('nonportable_optimization').format(language=language[state['language']], name=state['name'])
     coverage = option_template.format('coverage').format(language=language[state['language']], name=state['name'])
-    language_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(language[state['language']])
-    project_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(state['name'])
-    contents = "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}>$<$<AND:$<CONFIG:DEBUG>,$<BOOL:${{coverage}}>>:{coverage}>{language_appended_flags}{project_appended_flags}\""
+    language_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}};>".format(language[state['language']])
+    project_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}};>".format(state['name'])
+    contents = "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}>$<$<CONFIG:DEBUG>:{coverage}>{language_appended_flags}{project_appended_flags}\""
     contents = contents.format(release=release,
                                link_time_optimization=link_time_optimization,
                                profile_generate=profile_generate,
