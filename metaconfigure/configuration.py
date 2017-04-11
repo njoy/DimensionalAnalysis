@@ -68,7 +68,7 @@ languages['fortran']['compiler']['gfortran']['linux']['flags']['warning'] = lang
 languages['c']['compiler']['gcc']['linux']['flags']['strict'] = ['-Werror']
 languages['fortran']['compiler']['gfortran']['linux']['flags']['strict'] = languages['c']['compiler']['gcc']['linux']['flags']['strict']
 
-languages['c']['compiler']['gcc']['linux']['flags']['debug'] = ['-O0', '-g', '-gdwarf-3', '-frounding-math', '-fsignaling-nans']
+languages['c']['compiler']['gcc']['linux']['flags']['debug'] = ['-O0', '-g', '-gdwarf-3', '-fsignaling-nans']
 languages['fortran']['compiler']['gfortran']['linux']['flags']['debug'] = languages['c']['compiler']['gcc']['linux']['flags']['debug'] + ['-fcheck=all', '-ffpe-trap=invalid,zero,overflow']
 
 languages['c']['compiler']['gcc']['linux']['flags']['coverage'] = ['--coverage']
