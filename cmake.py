@@ -545,7 +545,7 @@ def install(state):
     if 'include path' in state and is_subdirectory(state['include path'], os.getcwd()):
         if 'header files' in state['file extension']:
             for extension in state['file extension']['header files']:
-                regex.append(".*\.{0}".format(extension))                
+                regex.append(".*\\.{0}$".format(extension).replace('+', '[+]'))
 
             contents += """
         install( DIRECTORY {include_path} DESTINATION include
