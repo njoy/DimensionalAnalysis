@@ -548,7 +548,7 @@ def install(state):
                 regex.append(".*\\.{0}$".format(extension).replace('+', '[+]'))
 
             contents += """
-        install( DIRECTORY {include_path} DESTINATION include
+        install( DIRECTORY {include_path}/ DESTINATION include
                  FILE_PERMISSIONS OWNER_READ OWNER_WRITE 
                                   GROUP_READ 
                                   WORLD_READ
