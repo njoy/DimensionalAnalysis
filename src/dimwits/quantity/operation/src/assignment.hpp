@@ -31,3 +31,19 @@ quantity::Type< UnitLeft, MagnitudeLeft >& operator-=
   left.value -= conversion::factor<UnitRight, UnitLeft> * right.value;
   return left;
 }
+
+template< typename Magnitude, typename Unit, typename Factor >
+auto operator*=
+( quantity::Type< Unit, Magnitude >& left, const Factor& right )
+  -> std::conditional_t< true, decltype(left), decltype( left = left * right ) >{
+  left.value *= right;
+  return left;
+}
+
+template< typename Magnitude, typename Unit, typename Factor >
+auto operator/=
+( quantity::Type< Unit, Magnitude >& left, const Factor& right )
+  -> std::conditional_t< true, decltype(left), decltype( left = left / right ) >{
+  left.value /= right;
+  return left;
+}
