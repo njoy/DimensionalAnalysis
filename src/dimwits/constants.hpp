@@ -1,5 +1,6 @@
 namespace constant {
 
+constexpr auto unitless = 1.0 * meter / meter;
 constexpr auto avogadro = 6.022140857E+23  / mole;
 constexpr auto boltzmann = 1.38064852E-23 * joule / kilo(gram);
 constexpr auto classicalElectronRadius = 2.8179403227E-15 * meter;

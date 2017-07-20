@@ -114,6 +114,44 @@ TEST_CASE("operations"){
       REQUIRE( generate_unit == Centi<Meter>{} );
     }
   }
+
+  SECTION("times equals"){
+    SECTION("scalar"){
+      quantity::Type< Centi<Meter> > length = 1.0 * meter;
+      length *= 5.0;
+      REQUIRE( 500.0 == length.value );
+
+      auto generate_unit = decltype(length)::Units();
+      REQUIRE( generate_unit == Centi<Meter>{} );
+    }
+    SECTION("unitless"){
+      quantity::Type< Centi<Meter> > length = 1.0 * meter;
+      length *= 5.0 * meter / meter;
+      REQUIRE( 500.0 == length.value );
+
+      auto generate_unit = decltype(length)::Units();
+      REQUIRE( generate_unit == Centi<Meter>{} );
+    }
+  }
+
+  SECTION("divide equals"){
+    SECTION("scalar"){
+      quantity::Type< Centi<Meter> > length = 1.0 * meter;
+      length /= 2.0;
+      REQUIRE( 50.0 == length.value );
+
+      auto generate_unit = decltype(length)::Units();
+      REQUIRE( generate_unit == Centi<Meter>{} );
+    }
+    SECTION("different unit"){
+      quantity::Type< Centi<Meter> > length = 1.0 * meter;
+      length /= 2.0 * meter / meter;
+      REQUIRE( 50.0 == length.value );
+
+      auto generate_unit = decltype(length)::Units();
+      REQUIRE( generate_unit == Centi<Meter>{} );
+    }
+  }
   
   SECTION("addition and subtraction"){
     /* In addition and subtraction, there is an choice to be made:
@@ -173,13 +211,21 @@ TEST_CASE("operations"){
   }
   
   SECTION("output operator"){
-    auto length0 = 1.0 * foot;
-    auto length1 = 11.0 * inches;
-    auto length2 = 1.0 * angstroms;
+    {
+      auto length0 = 1.0 * foot;
+      auto length1 = 11.0 * inches;
+      auto length2 = 1.0 * angstroms;
 
-    std::stringstream ss;
-    ss << length0 << length1 << length2 << (length0 * length1 * length2);
-    REQUIRE( ss.str() == " 1 ft 11 in 1 angstrom 11 angstrom in ft" );
+      std::stringstream ss;
+      ss << length0 << length1 << length2 << (length0 * length1 * length2);
+      REQUIRE( ss.str() == " 1 ft 11 in 1 angstrom 11 angstrom in ft" );
+    }{
+      auto scalar = 2.0 * constant::unitless;
+      std::stringstream ss;
+      ss << scalar;
+      REQUIRE( ss.str() == " 2" );
+    }
+    
   }
 }
 
@@ -251,4 +297,11 @@ TEST_CASE( "exponentiation"){
   auto length0 = 1.0 * meter;
   REQUIRE( length0 * length0 == pow( length0, Ratio<2> ) );
   REQUIRE( length0 == sqrt( pow( length0, Ratio<2> ) ) );
+}
+
+TEST_CASE( "absolute value"){
+  auto length0 = -1.0 * meter;
+  auto length1 =  1.0 * meter;
+  REQUIRE( std::abs(length0) == length1 );
+  REQUIRE( std::abs(length1) == length1 );
 }
