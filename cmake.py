@@ -132,7 +132,7 @@ def define_options(state):
     contents="""
 
     # general properties
-    option( strict "Compile time warnings are converted to errors" {strict} )
+    option( {name}_strict "Compile time warnings are converted to errors" {strict} )
     
     # binary instrumentation
     option( coverage "Enable binary instrumentation to collect test coverage information in the DEBUG configuration" )
@@ -230,17 +230,17 @@ def define_compiler_flags(state):
 
 def lto_flags_expression(state):
     contents = ""
-    release = "${{${{PREFIX}}_RELEASE_flags}}".format(language=language[state['language']], name=state['name'])
+    release = "${{${{PREFIX}}_RELEASE_flags}};".format(language=language[state['language']], name=state['name'])
     link_time_optimization = "${{${{PREFIX}}_link_time_optimization_flags}}".format(language=language[state['language']], name=state['name'])
-    option_template = "$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
+    option_template = "$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}};>"
 
     profile_generate = option_template.format('profile_generate').format(language=language[state['language']], name=state['name'])
     profile_use = option_template.format('profile_use').format(language=language[state['language']], name=state['name'])
     nonportable_optimization = option_template.format('nonportable_optimization').format(language=language[state['language']], name=state['name'])
     coverage = option_template.format('coverage').format(language=language[state['language']], name=state['name'])
-    language_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(language[state['language']])
-    project_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(state['name'])
-    contents = "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}>$<$<AND:$<CONFIG:DEBUG>,$<BOOL:${{coverage}}>>:{coverage}>{language_appended_flags}{project_appended_flags}\""
+    language_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}};>".format(language[state['language']])
+    project_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}};>".format(state['name'])
+    contents = "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}>$<$<CONFIG:DEBUG>:{coverage}>{language_appended_flags}{project_appended_flags}\""
     contents = contents.format(release=release,
                                link_time_optimization=link_time_optimization,
                                profile_generate=profile_generate,
@@ -261,7 +261,7 @@ def target_flags_expression(state):
     release = template.format('RELEASE')
 
     option_template = "\n$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
-    strict = option_template.format('strict')
+    strict = option_template.format('{name}_strict')
     coverage = option_template.format('coverage')
     profile_generate = option_template.format('profile_generate')
     link_time_optimization = option_template.format('link_time_optimization')
@@ -373,7 +373,7 @@ def link_dependencies(state):
     if len(state['subprojects']) > 0 :
         contents += '\ntarget_link_libraries( {name}'
         for name, subproject in state['subprojects'].items():
-            contents += (' PUBLIC {}' if has_library(subproject) else ' INTERFACE {}').format(name)
+            contents += (' PUBLIC {}' if has_library(state) else ' INTERFACE {}').format(name)
 
         contents += ' )\n'
 
@@ -432,7 +432,7 @@ target_link_libraries( {name} {policy} {link_flags} )
 if ( NOT is_subproject )
     add_executable( {name}_executable {driver} )
     set_target_properties( {name}_executable PROPERTIES OUTPUT_NAME {name} )
-    target_compile_options( {name}_executable PRIVATE {compile_flags} )
+    target_compile_options( {name}_executable PRIVATE {indented_compile_flags} )
     target_link_libraries( {name}_executable {policy} {name} )
 endif()
         """)
@@ -443,6 +443,7 @@ endif()
                                            policy=policy,
                                            sources=sources,
                                            compile_flags=compile_flags,
+                                           indented_compile_flags=compile_flags.replace('\n', '\n    '),
                                            link_flags=link_flags,
                                            include_path=state['include path'] if 'include path' in state else ''))
 
@@ -525,9 +526,8 @@ def install(state):
         targets.append("{name}_executable".format(name=state['name']))
 
     if targets:
-        targets=' '.join(targets)
-        contents += """
-        install( TARGETS {targets} 
+        block = """
+        install( TARGETS ${{installation_targets}} 
                  RUNTIME DESTINATION bin
                  LIBRARY DESTINATION lib
                  ARCHIVE DESTINATION lib
@@ -535,20 +535,41 @@ def install(state):
                              GROUP_EXECUTE GROUP_READ 
                              WORLD_EXECUTE WORLD_READ"""
         if "group id" in state:
-            contents += """
+            block += """
                              SETGID {gid}"""
 
-        contents += """ )
+        block += """ )
         """
+        
+        if has_executable(state):
+            if len(targets) > 1:
+                contents += """
+        set( installation_targets {0} )""".format(targets[0])
+                contents += """
+        if ( NOT is_subproject )
+            list( APPEND installation_targets {0} )
+        endif()
+                """.format(targets[-1])
+                contents += block
+            else:
+                contents += """
+        if ( NOT is_subproject )
+            list( APPEND installation_targets {0} )"""
+                contents += block.replace('\n', '\n    ')
+                contents += """
+        endif()
+                """
+                
+
 
     regex=[]
     if 'include path' in state and is_subdirectory(state['include path'], os.getcwd()):
         if 'header files' in state['file extension']:
             for extension in state['file extension']['header files']:
-                regex.append(".*\.{0}".format(extension))                
+                regex.append(".*\\.{0}$".format(extension).replace('+', '[+]'))
 
             contents += """
-        install( DIRECTORY {include_path} DESTINATION include
+        install( DIRECTORY {include_path}/ DESTINATION include
                  FILE_PERMISSIONS OWNER_READ OWNER_WRITE 
                                   GROUP_READ 
                                   WORLD_READ
@@ -596,7 +617,11 @@ def install(state):
 def generate():
     state=description.deserialize()
     description.collect_subprojects(state, state['project path'])
-    contents = "cmake_minimum_required( VERSION 3.2 ) \n"
+    contents = \
+        """
+cmake_minimum_required( VERSION 3.2 ) 
+set( CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported configuration types" FORCE )
+        """
     contents += fetch_subprojects(state)
     contents += project_statement(state)
     if not state['is external project']:
