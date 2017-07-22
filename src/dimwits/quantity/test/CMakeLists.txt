@@ -1,7 +1,7 @@
 
 add_executable( dimwits.quantity.test
-                operations.test.cpp
-                quantity.test.cpp )
+                quantity.test.cpp
+                operations.test.cpp )
 target_compile_options( dimwits.quantity.test PRIVATE ${${PREFIX}_common_flags}
 $<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>$<$<CONFIG:DEBUG>:
 ${${PREFIX}_DEBUG_flags}
