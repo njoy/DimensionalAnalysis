@@ -1,5 +1,6 @@
 #include "dimwits.hpp"
 #include "catch.hpp"
+#include <iostream>
 
 using namespace dimwits;
 namespace dim = dimwits::dimension;
@@ -42,5 +43,16 @@ TEST_CASE("operations"){
 
   SECTION("sqrt is halfing the dimension power"){
     REQUIRE( sqrt( pow( dim::mass, Ratio<3> ) ) == pow( dim::mass, Ratio<3,2> ) );
+  }
+
+  SECTION("wave number"){   
+    REQUIRE( pow( dim::length, Ratio<-1> ) ==
+             sqrt( dim::mass ) * sqrt( dim::energy )
+             / ( dim::energy * dim::time ) );
+
+    REQUIRE( pow( dim::length, Ratio<-1> ) ==
+             sqrt( dim::mass ) / ( sqrt(dim::energy) * dim::time ) );
+
+
   }
 }

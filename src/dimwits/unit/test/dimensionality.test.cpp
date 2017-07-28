@@ -77,4 +77,39 @@ SCENARIO("dimensionality"){
   REQUIRE( dimension::energy
            == unit::dimensionality( Gram() * Meter() * Meter()
                                     / Second() / Second() ) );
+
+  REQUIRE( sqrt( dimension::mass ) ==
+           unit::dimensionality( pow( Gram(), Ratio<1,2> ) ) );
+
+  REQUIRE( sqrt( dimension::mass ) / dimension::energy ==
+           unit::dimensionality( pow( Gram(), Ratio<1,2> )
+                                 / Joule() ) );
+
+  REQUIRE( sqrt( dimension::mass ) / sqrt( dimension::energy ) ==
+           unit::dimensionality( pow( Gram(), Ratio<1,2> )
+                                 * pow( ElectronVolt(), Ratio<1,2> )
+                                 / Joule() ) );
+
+  REQUIRE( sqrt( dimension::mass )
+           / sqrt( dimension::energy )
+           / dimension::time
+           == unit::dimensionality( pow( Gram(), Ratio<1,2> )
+                                    / pow( Joule(), Ratio<1,2> ) / Second() ) );
+
+  REQUIRE( sqrt( dimension::mass )
+           / sqrt( dimension::energy )
+           / dimension::time ==
+           unit::dimensionality( pow( Gram(), Ratio<1,2> )
+                                 * pow( ElectronVolt(), Ratio<1,2> )
+                                 / Joule() / Second() ) );
+  
+  REQUIRE( sqrt( dimension::mass )
+           / sqrt( dimension::energy )
+           / dimension::time == pow( dimension::length, Ratio<-1> ) );
+  
+  REQUIRE( pow( dimension::length, Ratio<-1> )
+           == unit::dimensionality( pow( Gram(), Ratio<1,2> )
+                                    * pow( Joule(), Ratio<1,2> )
+                                    / Joule() / Second() ) );
+  
 }

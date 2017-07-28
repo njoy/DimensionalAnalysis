@@ -1,7 +1,7 @@
 template< int64_t numerator, int64_t denominator >
 constexpr auto reduce( std::true_type ){
   constexpr auto gcf = greatestCommonFactor( numerator, denominator );
-  return Type< numerator/gcf, denominator/gcf >();
+  return Type< numerator/gcf, numerator == 0 ? 1 : denominator/gcf >();
 }
 
 template< int64_t numerator, int64_t denominator >
