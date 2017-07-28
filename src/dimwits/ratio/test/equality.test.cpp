@@ -11,4 +11,10 @@ SCENARIO("equality"){
   REQUIRE( not(reference == notEqual) );
   REQUIRE( reference != notEqual );
   REQUIRE( not(reference != equal ));
+
+  SECTION("regression tests"){
+    auto zero0 = Type<0,1>{};
+    auto zero1 = Type<0,2>{};
+    REQUIRE(zero0 == zero1);
+  }
 }
