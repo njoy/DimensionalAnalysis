@@ -32,6 +32,6 @@ constexpr auto pow( Type< Unit > t, ratio::Type< n, d > r ){
 }
 
 template< typename Unit >
-constexpr auto pow( Type< Unit > t ){
+constexpr auto sqrt( Type< Unit > t ){
   return decltype( operation::exponentiation( t, Ratio< 1, 2 > ) ){};
 }
