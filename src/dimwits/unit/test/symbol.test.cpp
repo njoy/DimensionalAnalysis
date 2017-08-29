@@ -58,7 +58,7 @@ SCENARIO("symbol"){
 
   REQUIRE("C" == unit::symbol( Coulomb() ) );
 
-  REQUIRE("S" == unit::symbol( Seimens() ) );
+  REQUIRE("S" == unit::symbol( Siemens() ) );
 
   REQUIRE("F" == unit::symbol( Farad() ) );
 
