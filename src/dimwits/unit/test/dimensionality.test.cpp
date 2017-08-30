@@ -58,7 +58,7 @@ SCENARIO("dimensionality"){
 
   REQUIRE( dimension::charge == unit::dimensionality( Coulomb() ) );
 
-  REQUIRE( dimension::conductance == unit::dimensionality( Seimens() ) );
+  REQUIRE( dimension::conductance == unit::dimensionality( Siemens() ) );
 
   REQUIRE( dimension::capacitance == unit::dimensionality( Farad() ) );
 

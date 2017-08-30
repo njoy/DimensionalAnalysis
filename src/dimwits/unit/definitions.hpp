@@ -202,7 +202,7 @@ using Coulombs = Coulomb;
 
 // electrical conductance
 // reference unit: second * second * second * ampere * ampere / meter / meter / gram
-DEFINE_UNIT( seimens, conductance, S, Seimens, 1E-3 )
+DEFINE_UNIT( siemens, conductance, S, Siemens, 1E-3 )
 
 // electrical capacitance
 // reference unit: second * second * second * second * ampere * ampere / meter / meter / gram
