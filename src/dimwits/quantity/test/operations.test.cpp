@@ -28,7 +28,7 @@ TEST_CASE("operations"){
        * the same dimensionality are provided */
       quantity::Type< Unitless > scalar;
       scalar = 1.0;
-      //      REQUIRE( 1.0 == scalar );
+      REQUIRE( 1.0 == scalar );
     }
   }
 
@@ -37,7 +37,11 @@ TEST_CASE("operations"){
     length0.value = 2.0;
     auto area0 = length0 * length0;
     REQUIRE( 4.0 == area0.value );
-
+    auto length1 = 2.0 * length0;
+    auto length2 = length0 * 2.0;
+    REQUIRE( 4.0 == length1.value );
+    REQUIRE( 4.0 == length2.value );
+    
     auto generate_unit = area0.units();
     auto expected_unit = centi(meter) * centi(meter);
 
