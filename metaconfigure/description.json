@@ -406,7 +406,6 @@
     "src/dimwits/unit/src/symbol.hpp",
     "src/dimwits/unit/src/dimensionality.hpp",
     "src/dimwits/unit/src/referenceUnit.hpp",
-    "src/dimwits/detail/definition.hpp",
     "src/dimwits/detail/operation.hpp",
     "src/dimwits/detail/src/definition.hpp",
     "src/dimwits/detail/src/map.hpp",
@@ -415,7 +414,6 @@
     "src/dimwits/detail/operation/src/exponentiation.hpp",
     "src/dimwits/detail/operation/src/multiply.hpp",
     "src/dimwits/dimension/operation.hpp",
-    "src/dimwits/dimension/src/definition.hpp",
     "src/dimwits/dimension/src/isBasis.hpp"
   ],
   "ignore pattern": "$^",
