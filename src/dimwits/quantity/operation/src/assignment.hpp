@@ -1,71 +1,138 @@
+namespace quantity {
+
 template< typename MagnitudeLeft, typename MagnitudeRight, typename Unit >
-quantity::Type< Unit, MagnitudeLeft >& operator+=
-( quantity::Type< Unit, MagnitudeLeft >& left,
-  const quantity::Type< Unit, MagnitudeRight >& right ){
+Type< Unit, MagnitudeLeft >& operator+=
+( Type< Unit, MagnitudeLeft >& left,
+  const Type< Unit, MagnitudeRight >& right ){
   left.value += right.value;
   return left;
 }
 
 template< typename MagnitudeLeft, typename UnitLeft,
           typename MagnitudeRight, typename UnitRight >
-quantity::Type< UnitLeft, MagnitudeLeft >& operator+=
-( quantity::Type< UnitLeft, MagnitudeLeft >& left,
-  const quantity::Type< UnitRight, MagnitudeRight >& right ){
+Type< UnitLeft, MagnitudeLeft >& operator+=
+( Type< UnitLeft, MagnitudeLeft >& left,
+  const Type< UnitRight, MagnitudeRight >& right ){
   left.value += conversion::factor<UnitRight, UnitLeft> * right.value;
   return left;
 }
 
 template< typename MagnitudeLeft, typename MagnitudeRight, typename Unit >
-quantity::Type< Unit, MagnitudeLeft >& operator-=
-( quantity::Type< Unit, MagnitudeLeft >& left,
-  const quantity::Type< Unit, MagnitudeRight >& right ){
+Type< Unit, MagnitudeLeft >& operator-=
+( Type< Unit, MagnitudeLeft >& left,
+  const Type< Unit, MagnitudeRight >& right ){
   left.value -= right.value;
   return left;
 }
 
 template< typename MagnitudeLeft, typename UnitLeft,
           typename MagnitudeRight, typename UnitRight >
-quantity::Type< UnitLeft, MagnitudeLeft >& operator-=
-( quantity::Type< UnitLeft, MagnitudeLeft >& left,
-  const quantity::Type< UnitRight, MagnitudeRight >& right ){
+Type< UnitLeft, MagnitudeLeft >& operator-=
+( Type< UnitLeft, MagnitudeLeft >& left,
+  const Type< UnitRight, MagnitudeRight >& right ){
   left.value -= conversion::factor<UnitRight, UnitLeft> * right.value;
   return left;
 }
 
 template< typename Magnitude, typename Unit, typename Factor >
 auto operator*=
-( quantity::Type< Unit, Magnitude >& left, const Factor& right )
+( Type< Unit, Magnitude >& left, const Factor& right )
   -> std::conditional_t< true, decltype(left),
-			       decltype( left.value = left.value * right ) >{
-  left.value = left.value * right;
+                               decltype( left.value *= right ) >
+{
+  left.value *= right;
   return left;
 }
 
 template< typename Magnitude, typename Unit, typename Factor >
 auto operator/=
-( quantity::Type< Unit, Magnitude >& left, const Factor& right )
+( Type< Unit, Magnitude >& left, const Factor& right )
   -> std::conditional_t< true, decltype(left),
-			       decltype( left.value = left.value / right ) >{
-  left.value = left.value / right;
+                               decltype( left.value /= right ) >
+{
+  left.value /= right;
   return left;
 }
 
 template< typename Magnitude, typename Unit, typename Factor >
 auto operator+=
-( quantity::Type< Unit, Magnitude >& left, const Factor& right )
-  -> std::conditional_t< true,
-                         std::enable_if_t< Unit{} == Unitless{}, decltype(left) >,
-			 decltype( left.value = left.value + right ) >{
-  left.value = left.value + right;
-  return left;
+( Type< Unit, Magnitude >& left, const Factor& right ) ->
+  std::conditional_t
+  < true,
+    std::enable_if_t
+    < Unit{} == Unitless{} and not isType<Factor>::value,
+      decltype(left) >,
+    decltype( left.value += right ) >
+{
+   left.value += right;
+   return left;
 }
 
 template< typename Magnitude, typename Unit, typename Factor >
 auto operator-=
-( quantity::Type< Unit, Magnitude >& left, const Factor& right )
-  -> std::conditional_t< true,
-                         std::enable_if_t< Unit{} == Unitless{}, decltype(left) >,
-			 decltype( left.value = left.value - right ) >{
-  left.value = left.value - right;
+( Type< Unit, Magnitude >& left, const Factor& right )
+  -> std::conditional_t
+     < true,
+       std::enable_if_t
+       < Unit{} == Unitless{} and not isType<Factor>::value,
+         decltype(left) >,
+       decltype( left.value -= right ) >
+{
+  left.value -= right;
   return left;
+}
+
+
+template< typename Magnitude, typename Unit, typename Factor >
+auto operator*=
+( Factor& left, const Type< Unit, Magnitude >& right ) ->
+  std::conditional_t
+  < true,
+    std::enable_if_t
+    < Unit{} == Unitless{} and not isType<Factor>::value,
+      decltype(left) >,
+    decltype( left *= right.value ) >
+{
+  return left *= right.value;
+}
+
+template< typename Magnitude, typename Unit, typename Factor >
+auto operator/=
+( Factor& left, const Type< Unit, Magnitude >& right ) ->
+  std::conditional_t
+  < true,
+    std::enable_if_t
+    < Unit{} == Unitless{} and not isType<Factor>::value,
+      decltype(left) >,
+    decltype( left /= right.value ) >
+{
+  return left /= right.value;
+}
+
+template< typename Magnitude, typename Unit, typename Factor >
+auto operator+=
+( Factor& left, const Type< Unit, Magnitude >& right ) ->
+  std::conditional_t
+  < true,
+    std::enable_if_t
+    < Unit{} == Unitless{} and not isType<Factor>::value,
+      decltype(left) >,
+    decltype( left += right.value ) >
+{
+  return left += right.value;
+}
+
+template< typename Magnitude, typename Unit, typename Factor >
+auto operator-=
+( Factor& left, const Type< Unit, Magnitude >& right ) ->
+  std::conditional_t
+  < true,
+    std::enable_if_t
+    < Unit{} == Unitless{} and not isType<Factor>::value,
+      decltype(left) >,
+    decltype( left -= right.value ) >
+{
+  return left -= right.value;
+}
+
 }

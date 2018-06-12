@@ -1,6 +1,8 @@
+namespace quantity {
+
 template< typename OutputStream, typename Magnitude, typename Unit >
 auto operator<<
-( OutputStream& os, const quantity::Type<Unit, Magnitude>& output ) ->
+( OutputStream& os, const Type<Unit, Magnitude>& output ) ->
   std::enable_if_t< Unit{} != Unitless{}, OutputStream&>
 {
   os << ' ' << output.value << ' ' << unit::symbol( Unit{} );
@@ -9,8 +11,10 @@ auto operator<<
 
 template< typename OutputStream, typename Magnitude, typename Unit >
 auto operator<<
-( OutputStream& os, const quantity::Type<Unit, Magnitude>& output ) ->
+( OutputStream& os, const Type<Unit, Magnitude>& output ) ->
 std::enable_if_t< Unit{} == Unitless{}, OutputStream&>{
   os << ' ' << output.value;
   return os;
+}
+
 }
