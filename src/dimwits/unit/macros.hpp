@@ -1,23 +1,28 @@
-#define DEFINE_UNIT( NAME, DIMENSION, SYMBOL, LABEL, RATIO )            \
-  constexpr auto NAME = unit::makePrimitive( NEW_TAG() );               \
+#define DEFINE_UNIT( NAME, DIMENSION, SYMBOL, LABEL, RATIO )		\
+  									\
+namespace unit {							\
+namespace key {							        \
+static constexpr struct NAME##_tag : hana::type< NAME##_tag > {} NAME;  \
+									\
+inline constexpr auto dimensionality( key::NAME##_tag ){		\
+  return dimension::DIMENSION;						\
+}									\
                                                                         \
-  namespace unit {                                                      \
+inline std::string symbol( key::NAME##_tag ){				\
+  return #SYMBOL;							\
+}									\
                                                                         \
-  inline constexpr auto dimensionality( decltype(NAME) ){               \
-    return dimension::DIMENSION;                                        \
-  }                                                                     \
-                                                                        \
-  inline std::string symbol( decltype(NAME) ){                          \
-    return #SYMBOL ;                                                    \
-  }                                                                     \
-                                                                        \
-  inline constexpr double referenceUnitRatio( decltype(NAME) ){         \
+inline constexpr double referenceUnitRatio( key::NAME##_tag ){		\
     return RATIO;                                                       \
-  }                                                                     \
-                                                                        \
-  } /* namespace unit */                                                \
-                                                                        \
-  using LABEL = unit::CorrespondingType< decltype(NAME) >;
+}									\
+									\
+} /* namespace key */							\
+} /* namespace unit */							\
+ 									\
+constexpr auto NAME =							\
+  detail::definition< unit::Type >( unit::key::NAME, Ratio<1> );	\
+ 									\
+using LABEL = decltype(NAME);
 
 #define DEFINE_BASIS_UNIT( NAME, DIMENSION, SYMBOL, LABEL )             \
   DEFINE_UNIT( NAME, DIMENSION, SYMBOL, LABEL, 1.0 )                    \

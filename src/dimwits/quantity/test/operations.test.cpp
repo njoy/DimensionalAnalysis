@@ -22,6 +22,14 @@ TEST_CASE("operations"){
       quantity::Type< Meter > length1 = length0;
       REQUIRE( 0.01 == length1.value );
     }
+
+    SECTION( "unitless assignment" ){
+      /* implicit conversions between quantities of 
+       * the same dimensionality are provided */
+      quantity::Type< Unitless > scalar;
+      scalar = 1.0;
+      //      REQUIRE( 1.0 == scalar );
+    }
   }
 
   SECTION("multiplication"){
@@ -30,8 +38,8 @@ TEST_CASE("operations"){
     auto area0 = length0 * length0;
     REQUIRE( 4.0 == area0.value );
 
-    auto generate_unit = decltype(area0)::Units();
-    auto expected_unit = Centi<Meter>() * Centi<Meter>();
+    auto generate_unit = area0.units();
+    auto expected_unit = centi(meter) * centi(meter);
 
     REQUIRE( generate_unit == expected_unit );
   }
@@ -41,21 +49,21 @@ TEST_CASE("operations"){
     /* Lazy unit conversion in action */
     /* Using auto allows the units to be evaluated lazily. Hence the units
      * of area0 is ft^3/in and the magnitude is 1/ 12 */ 
-    REQUIRE( decltype( area0 )::Units() == Foot() * Foot() * Foot() / Inch() );
+    REQUIRE( area0.units() == foot * foot * foot / inch );
     REQUIRE( ( 1.0 / 12.0 ) == area0.value );
 
     /* To get a more intuitive unit, a user need only ask */ 
-    quantity::Type< decltype( Foot() * Foot() ) > area1 = area0;
+    quantity::Type< decltype( foot * foot ) > area1 = area0;
     REQUIRE( std::abs( 1.0 - area1.value ) < 3E-16 );
 
     /* scalars can divided by quantity values */
     auto inverse = 2.0 / area1;
-    REQUIRE( decltype(inverse)::Units() == Unitless() / Foot() / Foot() );
+    REQUIRE( inverse.units() == unit::less / foot / foot );
     REQUIRE( inverse.value == Approx(2.0) );
 
     /* or vice-versa */
     auto otherInverse = area1 / 2.0;
-    REQUIRE( decltype(otherInverse)::Units() == Foot() * Foot() );
+    REQUIRE( otherInverse.units() == foot * foot );
     REQUIRE( std::abs( otherInverse.value ) == Approx(0.5) );
   }
 
@@ -64,8 +72,8 @@ TEST_CASE("operations"){
     auto length1 = -length0;
     REQUIRE( -100.0 == length1.value );
 
-    auto generate_unit = decltype(length1)::Units();
-    REQUIRE( generate_unit == Centi<Meter>{} );
+    auto generate_unit = length1.units();
+    REQUIRE( generate_unit == centi(meter) );
   }
 
   SECTION("unary plus"){
@@ -73,8 +81,8 @@ TEST_CASE("operations"){
     auto length1 = +length0;
     REQUIRE( 100.0 == length1.value );
 
-    auto generate_unit = decltype(length1)::Units();
-    REQUIRE( generate_unit == Centi<Meter>{} );
+    auto generate_unit = length1.units();
+    REQUIRE( generate_unit == centi(meter) );
   }
 
   SECTION("plus equals"){
@@ -83,16 +91,21 @@ TEST_CASE("operations"){
       length += 1.0 * meter;
       REQUIRE( 200.0 == length.value );
 
-      auto generate_unit = decltype(length)::Units();
-      REQUIRE( generate_unit == Centi<Meter>{} );
+      auto generate_unit = length.units();
+      REQUIRE( generate_unit == centi(meter) );
     }
     SECTION("different unit"){
       quantity::Type< Centi<Meter> > length = 1.0 * meter;
       length += 1.0 * centi(meter);
       REQUIRE( 101.0 == length.value );
 
-      auto generate_unit = decltype(length)::Units();
-      REQUIRE( generate_unit == Centi<Meter>{} );
+      auto generate_unit = length.units();
+      REQUIRE( generate_unit == centi(meter) );
+    }
+    SECTION("unitless"){
+      quantity::Type< Unitless > scalar = 1.0;
+      scalar += 1;
+      REQUIRE( 2.0 == scalar );
     }
   }
 
@@ -113,6 +126,11 @@ TEST_CASE("operations"){
       auto generate_unit = decltype(length)::Units();
       REQUIRE( generate_unit == Centi<Meter>{} );
     }
+    SECTION("unitless"){
+      quantity::Type< Unitless > scalar = 2.0;
+      scalar -= 1;
+      REQUIRE( 1.0 == scalar );
+    }
   }
 
   SECTION("times equals"){
@@ -129,7 +147,7 @@ TEST_CASE("operations"){
       length *= 5.0 * meter / meter;
       REQUIRE( 500.0 == length.value );
 
-      auto generate_unit = decltype(length)::Units();
+      auto generate_unit = length.units();
       REQUIRE( generate_unit == Centi<Meter>{} );
     }
   }
@@ -167,26 +185,31 @@ TEST_CASE("operations"){
     auto area2 = area0 + area1;
     auto area3 = area1 + area0;
 
-    REQUIRE( decltype(area2)::Units() == Foot() * Foot() );
-    REQUIRE( decltype(area2)::Units() == decltype(area0)::Units() );
+    REQUIRE( area2.units() == foot * foot );
+    REQUIRE( area2.units() == area0.units() );
 
-    REQUIRE( decltype(area3)::Units() == Meter() * Meter() );
-    REQUIRE( decltype(area3)::Units() == decltype(area1)::Units() );
+    REQUIRE( area3.units() == meter * meter );
+    REQUIRE( area3.units() == area1.units() );
     
     /* Of course, a unit can also be specified */
-    quantity::Type< decltype( Meter() * Meter() ) > area4 = area0 + area1;
-    REQUIRE( decltype(area4)::Units() == Meter() * Meter() );
+    quantity::Type< decltype( meter * meter ) > area4 = area0 + area1;
+    REQUIRE( area4.units() == meter * meter );
 
-    quantity::Type< decltype( Foot() * Foot() ) > area5 = area0 - area1;
-    REQUIRE( decltype(area5)::Units() == Foot() * Foot() );
+    quantity::Type< decltype( foot * foot ) > area5 = area0 - area1;
+    REQUIRE( area5.units() == foot * foot );
   }
 
   SECTION("equality"){
     auto length0 = 1.0 * foot;
     auto length1 = 12.0 * inches;
     auto length2 = 1.0 * angstroms;
+    REQUIRE( length0 == length0 );
     REQUIRE( length0 == length1 );
     REQUIRE( length0 != length2 );
+
+    auto scalar = 1.0 * foot / foot;
+    REQUIRE( scalar == 1.0 * unit::less );
+    REQUIRE( scalar == 1.0 );
   }
 
   SECTION("less"){
@@ -208,6 +231,20 @@ TEST_CASE("operations"){
     REQUIRE( length1 >= length1 );
     REQUIRE( length1 >= length2 );
     REQUIRE( not( length2 >= length1 ) );
+
+    auto scalar = 1.0 * meter / meter;
+    REQUIRE( scalar < 2 );
+    REQUIRE( scalar <= 2 );
+    REQUIRE( scalar <= 1.0 );
+    REQUIRE( scalar >= 1.0 );
+    REQUIRE( scalar >= 0.5 );
+    REQUIRE( scalar > 0.5 );
+    REQUIRE( 2 > scalar );
+    REQUIRE( 2 >= scalar );
+    REQUIRE( 1.0 >= scalar );
+    REQUIRE( 1.0 <= scalar );
+    REQUIRE( 0.5 <= scalar );
+    REQUIRE( 0.5 < scalar );
   }
   
   SECTION("output operator"){
@@ -219,7 +256,8 @@ TEST_CASE("operations"){
       std::stringstream ss;
       ss << length0 << length1 << length2 << (length0 * length1 * length2);
       REQUIRE( ss.str() == " 1 ft 11 in 1 angstrom 11 angstrom in ft" );
-    }{
+    }
+    {
       auto scalar = 2.0 * constant::unitless;
       std::stringstream ss;
       ss << scalar;

@@ -1,23 +1,26 @@
 namespace unit {
+namespace detail {
 
 struct CompoundFunctor{
   template< typename Pair >
   constexpr double operator()( double compoundFactor, Pair pair ){
     auto pairFactor =
-      math::Pow::evaluate( unit::referenceUnitRatio
+      math::Pow::evaluate( referenceUnitRatio
                            ( std::decay_t< decltype( hana::first( pair ) ) >{} ),
                              std::decay_t< decltype( hana::second( pair ) ) >{} );
     return compoundFactor * pairFactor;
   }
-};   
+};
+
+} // namespace detail
   
 template< typename Definition >
 constexpr double referenceUnitRatio( unit::Type<Definition> ){
   auto definition = Definition{};
-  return hana::fold_left( definition, 1.0, CompoundFunctor{} );
+  return hana::fold_left( definition, 1.0, detail::CompoundFunctor{} );
 }
 
-}
+} // namespace unit
 
 namespace conversion {
 

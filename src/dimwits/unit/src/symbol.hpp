@@ -13,7 +13,7 @@ std::string symbol( Type<Definition> ){
       + '^' + to_string( hana::second(element) ) + ' ' );
       
   };
-  auto full = hana::fold_left( Definition{}, "", stringify );
-  full.pop_back();
+  auto full = hana::fold_left( Definition{}, std::string{}, stringify );
+  if ( full.size() ){ full.pop_back(); }
   return full;
 }
