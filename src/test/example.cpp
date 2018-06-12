@@ -1,12 +1,3 @@
-Dimwits
-=========
-...or DIMensional analysis With unITS is a C++14 library for compile-time
-dimensional analysis and unit awareness.
-
-Minimal Example
-----------------
-
-```c++
 #include <iostream>
 #include "dimwits.hpp"
 
@@ -35,14 +26,3 @@ std::cout << "1 megatonne in kilograms is: " << myMass << std::endl;
 std::cout << "The speed of light is: " << constant::lightSpeed << std::endl;
 
 }
-```
-
-This example has the following output:
-
-```
-The speed is:  1 s^-1 m
-1 meter in inches is:  39.3701 in
-1 meter in feet is:  3.28084 ft
-1 megatonne in kilograms is:  1e+09 kg
-The speed of light is:  2.99792e+08 s^-1 m
-```
