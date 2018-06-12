@@ -80,18 +80,6 @@ set( dimwits_AppleClang_Darwin_link_time_optimization_flags "-flto" )
 set( dimwits_AppleClang_Darwin_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
 set( dimwits_AppleClang_Darwin_nonportable_optimization_flags "-march=native" )
 set( dimwits_AppleClang_Darwin_static_flags "-static" )
-set( dimwits_GNU_Windows_common_flags "-Wall" "-Wextra" "-Wpedantic" "-std=c++14" )
-set( dimwits_GNU_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-fsignaling-nans" )
-set( dimwits_GNU_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
-set( dimwits_GNU_Windows_strict_flags "-Werror" )
-set( dimwits_GNU_Windows_coverage_flags "--coverage" )
-set( dimwits_GNU_Windows_subproject_flags  )
-set( dimwits_GNU_Windows_base_project_flags  )
-set( dimwits_GNU_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( dimwits_GNU_Windows_link_time_optimization_flags "-flto" )
-set( dimwits_GNU_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( dimwits_GNU_Windows_nonportable_optimization_flags "-march=native" )
-set( dimwits_GNU_Windows_static_flags "-static" )
 set( dimwits_GNU_Darwin_common_flags "-Wall" "-Wextra" "-Wpedantic" "-std=c++14" )
 set( dimwits_GNU_Darwin_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-fsignaling-nans" )
 set( dimwits_GNU_Darwin_RELEASE_flags "-O3" "-DNDEBUG" )
@@ -116,18 +104,18 @@ set( dimwits_GNU_Linux_link_time_optimization_flags "-flto" )
 set( dimwits_GNU_Linux_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
 set( dimwits_GNU_Linux_nonportable_optimization_flags "-march=native" )
 set( dimwits_GNU_Linux_static_flags "-static" )
-set( dimwits_Clang_Windows_common_flags "-stdlib=libc++" "-Wall" "-Wextra" "-Wpedantic" "-std=c++14" )
-set( dimwits_Clang_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" )
-set( dimwits_Clang_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
-set( dimwits_Clang_Windows_strict_flags "-Werror" )
-set( dimwits_Clang_Windows_coverage_flags "--coverage" )
-set( dimwits_Clang_Windows_subproject_flags  )
-set( dimwits_Clang_Windows_base_project_flags  )
-set( dimwits_Clang_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( dimwits_Clang_Windows_link_time_optimization_flags "-flto" )
-set( dimwits_Clang_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( dimwits_Clang_Windows_nonportable_optimization_flags "-march=native" )
-set( dimwits_Clang_Windows_static_flags "-static" )
+set( dimwits_GNU_Windows_common_flags "-Wall" "-Wextra" "-Wpedantic" "-std=c++14" )
+set( dimwits_GNU_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-fsignaling-nans" )
+set( dimwits_GNU_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
+set( dimwits_GNU_Windows_strict_flags "-Werror" )
+set( dimwits_GNU_Windows_coverage_flags "--coverage" )
+set( dimwits_GNU_Windows_subproject_flags  )
+set( dimwits_GNU_Windows_base_project_flags  )
+set( dimwits_GNU_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
+set( dimwits_GNU_Windows_link_time_optimization_flags "-flto" )
+set( dimwits_GNU_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
+set( dimwits_GNU_Windows_nonportable_optimization_flags "-march=native" )
+set( dimwits_GNU_Windows_static_flags "-static" )
 set( dimwits_Clang_Darwin_common_flags "-stdlib=libc++" "-Wall" "-Wextra" "-Wpedantic" "-std=c++14" )
 set( dimwits_Clang_Darwin_DEBUG_flags "-O0" "-g" "-gdwarf-3" )
 set( dimwits_Clang_Darwin_RELEASE_flags "-O3" "-DNDEBUG" )
@@ -152,6 +140,18 @@ set( dimwits_Clang_Linux_link_time_optimization_flags "-flto" )
 set( dimwits_Clang_Linux_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
 set( dimwits_Clang_Linux_nonportable_optimization_flags "-march=native" )
 set( dimwits_Clang_Linux_static_flags "-static" )
+set( dimwits_Clang_Windows_common_flags "-stdlib=libc++" "-Wall" "-Wextra" "-Wpedantic" "-std=c++14" )
+set( dimwits_Clang_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" )
+set( dimwits_Clang_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
+set( dimwits_Clang_Windows_strict_flags "-Werror" )
+set( dimwits_Clang_Windows_coverage_flags "--coverage" )
+set( dimwits_Clang_Windows_subproject_flags  )
+set( dimwits_Clang_Windows_base_project_flags  )
+set( dimwits_Clang_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
+set( dimwits_Clang_Windows_link_time_optimization_flags "-flto" )
+set( dimwits_Clang_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
+set( dimwits_Clang_Windows_nonportable_optimization_flags "-march=native" )
+set( dimwits_Clang_Windows_static_flags "-static" )
 get_directory_property( is_subproject PARENT_DIRECTORY )
 
 if( NOT TARGET hana-adapter )
@@ -233,9 +233,6 @@ target_sources( dimwits INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/unit/src/symbol.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/unit/src/dimensionality.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/unit/src/referenceUnit.hpp"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/unit/operation/src/division.hpp"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/unit/operation/src/exponentiation.hpp"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/unit/operation/src/multiply.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/detail/definition.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/detail/operation.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/detail/src/definition.hpp"
@@ -246,11 +243,7 @@ target_sources( dimwits INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/detail/operation/src/multiply.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/dimension/operation.hpp"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/dimension/src/definition.hpp"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/dimension/src/isBasis.hpp"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/dimension/operation/src/division.hpp"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/dimension/operation/src/exponentiation.hpp"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/dimension/operation/src/definition.hpp"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/dimension/operation/src/multiply.hpp" )
+             "${CMAKE_CURRENT_SOURCE_DIR}/src/dimwits/dimension/src/isBasis.hpp" )
 
 target_include_directories( dimwits INTERFACE src )
 

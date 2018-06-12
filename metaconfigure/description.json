@@ -406,9 +406,6 @@
     "src/dimwits/unit/src/symbol.hpp",
     "src/dimwits/unit/src/dimensionality.hpp",
     "src/dimwits/unit/src/referenceUnit.hpp",
-    "src/dimwits/unit/operation/src/division.hpp",
-    "src/dimwits/unit/operation/src/exponentiation.hpp",
-    "src/dimwits/unit/operation/src/multiply.hpp",
     "src/dimwits/detail/definition.hpp",
     "src/dimwits/detail/operation.hpp",
     "src/dimwits/detail/src/definition.hpp",
@@ -419,11 +416,7 @@
     "src/dimwits/detail/operation/src/multiply.hpp",
     "src/dimwits/dimension/operation.hpp",
     "src/dimwits/dimension/src/definition.hpp",
-    "src/dimwits/dimension/src/isBasis.hpp",
-    "src/dimwits/dimension/operation/src/division.hpp",
-    "src/dimwits/dimension/operation/src/exponentiation.hpp",
-    "src/dimwits/dimension/operation/src/definition.hpp",
-    "src/dimwits/dimension/operation/src/multiply.hpp"
+    "src/dimwits/dimension/src/isBasis.hpp"
   ],
   "ignore pattern": "$^",
   "implementation files": [],
