@@ -13,13 +13,14 @@ struct Type{ static constexpr auto definition = Map{}; };
   
 constexpr auto less = detail::definition<Type>();
 
-#define DEFINE( NAME )							 \
-									 \
-namespace key {							         \
-static constexpr struct NAME##_tag : hana::type< NAME##_tag > {} NAME;   \
-}									 \
-									 \
-constexpr auto NAME = detail::definition<Type>( key::NAME, Ratio<1> )
+#define DEFINE( NAME )							\
+  									\
+  namespace key {							\
+  static constexpr struct NAME##_tag :				        \
+    hana::type< NAME##_tag > {} NAME{};					\
+  }									\
+									\
+  static constexpr auto NAME = detail::definition<Type>( key::NAME, Ratio<1> )
 
 DEFINE( mass );
 DEFINE( length );

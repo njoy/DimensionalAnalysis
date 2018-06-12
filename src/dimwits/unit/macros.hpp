@@ -2,7 +2,7 @@
   									\
 namespace unit {							\
 namespace key {							        \
-static constexpr struct NAME##_tag : hana::type< NAME##_tag > {} NAME;  \
+static constexpr struct NAME##_tag : hana::type< NAME##_tag > {} NAME{};\
 									\
 inline constexpr auto dimensionality( key::NAME##_tag ){		\
   return dimension::DIMENSION;						\
@@ -19,7 +19,7 @@ inline constexpr double referenceUnitRatio( key::NAME##_tag ){		\
 } /* namespace key */							\
 } /* namespace unit */							\
  									\
-constexpr auto NAME =							\
+static constexpr auto NAME =						\
   detail::definition< unit::Type >( unit::key::NAME, Ratio<1> );	\
  									\
 using LABEL = decltype(NAME);
