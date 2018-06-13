@@ -7,6 +7,12 @@ constexpr auto dimensionality( Type< Unit, Magnitude > ){
   return dimensionality( Unit{} );
 }
 
+template<typename T>
+struct isType : std::false_type {};
+
+template<typename Unit, typename Magnitude>
+struct isType<Type<Unit, Magnitude>> : std::true_type {};
+
 }
 
 #include "dimwits/quantity/operation.hpp"

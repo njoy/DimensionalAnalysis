@@ -1,7 +1,7 @@
 
 add_executable( dimwits.conversion.test
-                factorValue.test.cpp
-                conversion.test.cpp )
+                conversion.test.cpp
+                factorValue.test.cpp )
 target_compile_options( dimwits.conversion.test PRIVATE ${${PREFIX}_common_flags}
 $<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>$<$<CONFIG:DEBUG>:
 ${${PREFIX}_DEBUG_flags}

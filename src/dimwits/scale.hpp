@@ -1,50 +1,63 @@
 namespace scale {
 
-struct Tag{};
+template< typename Prefix, typename BaseKey >
+struct Key : hana::type< hana::basic_tuple< Prefix, BaseKey > >{};
 
-template< typename BaseUnit, typename Identifier >
-struct Template : hana::type< hana::tuple< BaseUnit, Identifier > >{};
+/* the `key` and `type` functions are only used in unevaluated contexts
+ * to deduce a return type, and as such, need not be vetted for performance.
+ */
 
-template< typename Prefix, typename T >
-constexpr auto primitive( Prefix, dimwits::unit::Primitive< T > ){
-  static_assert( std::is_base_of<Tag, Prefix>::value, "" );
-  return Template< dimwits::unit::Primitive< T >, Prefix >{};
+template< typename Prefix, typename BaseKey >
+constexpr auto key( Prefix, BaseKey ){
+  return Key< Prefix, BaseKey >{};
 }
+
+// !!!!!!!!!!!!!!!!!!!!!!!!
+// intentionally undefined
+// !!!!!!!!!!!!!!!!!!!!!!!!
+/*
+ * This overload is the best match if a user tries to add a 
+ * prefix to a prefix-ed unit, e.g. kilo(mega(gram))
+ * Because the overload isn't defined, doing so results in a 
+ * compilation error.
+ */
+template< typename Prefix, typename OtherPrefix, typename BaseKey >
+constexpr auto key( Prefix, Key<OtherPrefix, BaseKey> );
 
 template< typename Prefix, typename Definition >
 constexpr auto type( Prefix, dimwits::unit::Type< Definition > t ){
   static_assert( not dimwits::unit::isComposite( t ), "" );
   auto definition = Definition{};
-  auto unscaledPrimitive =
+  auto unscaledKey =
     hana::first( hana::to_tuple( definition )[ hana::size_c<0> ] );
-  auto scaledPrimitive = primitive( Prefix{}, unscaledPrimitive );
+  auto scaledKey = key( Prefix{}, unscaledKey );
   using ScaledDefinition =
-    decltype( hana::make_map( hana::make_pair( scaledPrimitive, Ratio<1> ) ) );
+    decltype( hana::make_map( hana::make_pair( scaledKey, Ratio<1> ) ) );
   return dimwits::unit::Type< ScaledDefinition >{};
 }
 
-}
+} // namespace scale
 
 #define DEFINE_SCALE( LABEL, VALUE, NAME, SYMBOL )                       \
   namespace scale {                                                      \
-    struct LABEL : Tag {};                                               \
-    inline constexpr double factor( LABEL ){ return VALUE; }                       \
+    struct LABEL{};							 \
+    inline constexpr double factor( LABEL ){ return VALUE; }  		 \
   }                                                                      \
                                                                          \
-  template< typename T >                                                 \
-  constexpr auto NAME( unit::Primitive< T > t ){                         \
-    return decltype( scale::primitive( scale::LABEL{}, t ) ){};          \
+  template< typename Definition >					 \
+  constexpr auto NAME( unit::Type< Definition > t ){			 \
+    return decltype( scale::type( scale::LABEL{}, t ) ){};               \
   }                                                                      \
                                                                          \
   template< typename T >                                                 \
   using LABEL = decltype( scale::type( scale::LABEL{}, T{} ) );          \
                                                                          \
-  namespace unit {                                                       \
+  namespace scale {                                                       \
                                                                          \
-  template< typename T >                                                 \
+  template< typename BaseKey >					         \
   std::string symbol                                                     \
-  ( dimwits::scale::Template< Primitive< T >, dimwits::scale::LABEL > ){ \
-    return #SYMBOL + symbol( Primitive<T>{} );                           \
+  ( dimwits::scale::Key< dimwits::scale::LABEL, BaseKey > ){		 \
+    return #SYMBOL + symbol( BaseKey{} );                                \
   }                                                                      \
                                                                          \
   }
@@ -72,16 +85,16 @@ DEFINE_SCALE( Yocto, 1E-24, yocto, y )
 
 #undef DEFINE_SCALE
 
-namespace unit{
+namespace scale{
 
-template< typename Prefix, typename T >         
-constexpr auto dimensionality( scale::Template< Primitive< T >, Prefix > ){ 
-  return dimensionality( Primitive<T>{} );
+template< typename Prefix, typename BaseKey >         
+constexpr auto dimensionality( scale::Key< Prefix, BaseKey >){ 
+  return dimensionality( BaseKey{} );
 }
 
-template< typename BaseUnit, typename Identifier >
-constexpr double referenceUnitRatio( scale::Template< BaseUnit, Identifier > ){
-  return scale::factor( Identifier{} ) * referenceUnitRatio( BaseUnit{} );
+template< typename Prefix, typename BaseKey >
+constexpr double referenceUnitRatio( scale::Key< Prefix, BaseKey > ){
+  return scale::factor( Prefix{} ) * referenceUnitRatio( BaseKey{} );
 }
 
 }

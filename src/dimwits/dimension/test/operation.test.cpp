@@ -52,7 +52,5 @@ TEST_CASE("operations"){
 
     REQUIRE( pow( dim::length, Ratio<-1> ) ==
              sqrt( dim::mass ) / ( sqrt(dim::energy) * dim::time ) );
-
-
   }
 }

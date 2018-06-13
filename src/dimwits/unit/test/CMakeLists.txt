@@ -1,9 +1,9 @@
 
 add_executable( dimwits.unit.test
-                symbol.test.cpp
                 dimensionality.test.cpp
                 isComposite.test.cpp
                 referenceUnit.test.cpp
+                symbol.test.cpp
                 unit.test.cpp )
 target_compile_options( dimwits.unit.test PRIVATE ${${PREFIX}_common_flags}
 $<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>$<$<CONFIG:DEBUG>:

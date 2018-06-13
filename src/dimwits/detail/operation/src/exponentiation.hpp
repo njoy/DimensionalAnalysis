@@ -1,4 +1,4 @@
-template< typename Unit, int64_t n, int64_t d >
+template< template<typename> class Type, typename Unit, int64_t n, int64_t d >
 auto exponentiation( Type< Unit > , ratio::Type< n, d > r ){
   auto base = Unit{};
   auto keys = hana::keys( base );

@@ -1,7 +1,7 @@
 sudo: required
 
 git:
-  submodules: false  
+  submodules: false
 
 addons:
   apt:
@@ -14,9 +14,7 @@ addons:
       - g++-6
       - clang-3.8
       - llvm-dev
-      - cmake
-      - cmake-data
-      
+
 language: cpp
 
 compiler:
@@ -26,9 +24,9 @@ compiler:
 os:
   - linux
   - osx
-  
+
 osx_image: xcode8
-  
+
 script: ./.travis/build.sh
 after_success: ./.travis/signature.sh
 
@@ -53,3 +51,6 @@ matrix:
       env:
         build_type=debug static_libraries=FALSE
         appended_flags="-fsanitize=undefined;-fsanitize=integer;-fno-omit-frame-pointer"
+  exclude:
+    - os: osx
+      compiler: gcc

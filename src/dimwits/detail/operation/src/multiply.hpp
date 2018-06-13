@@ -1,6 +1,5 @@
-template< typename Left, typename Right >
-auto multiply( Type<Left>, Type<Right> ){
-  
+template< template<typename> class Type, typename Left, typename Right >
+auto multiply( Type<Left>, Type<Right> ){  
   auto left = Left{};
   auto right = Right{};
 
@@ -17,7 +16,6 @@ auto multiply( Type<Left>, Type<Right> ){
 		      hana::insert( map, hana::make_pair( unit, sum ) ) );
   };
 
-  auto result = hana::fold_left( units, hana::make_map(), sum );
-  
+  auto result = hana::fold_left( units, hana::make_map(), sum ); 
   return Type< decltype(result) >{};
 }

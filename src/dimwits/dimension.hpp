@@ -1,32 +1,39 @@
-namespace dimension {
-
+namespace dimension {  
+  
 /**
  * @brief An struct providing dimensional inference in generic code
  *
- * @tparam Map A hana::map of dimwits::basis::Types to dimwits::ratios
+ * @tparam Map A hana::map of key types to dimwits::ratios
  */
 template< typename Map >
 struct Type{ static constexpr auto definition = Map{}; };
 
 #include "dimwits/dimension/src/isBasis.hpp"
 #include "dimwits/dimension/operation.hpp"
+  
+constexpr auto less = detail::definition<Type>();
 
-template< typename... Ts >
-constexpr auto define( Ts... ts ){
-  return Type< decltype( operation::definition( ts... ) ) >{};
-}
+#define DEFINE( NAME )							\
+  									\
+  namespace key {							\
+  static constexpr struct NAME##_tag :				        \
+    hana::type< NAME##_tag > {} NAME{};					\
+  }									\
+									\
+  static constexpr auto NAME = detail::definition<Type>( key::NAME, Ratio<1> )
 
-constexpr auto less              = define();
-constexpr auto mass              = define( basis::mass             , Ratio<1> );
-constexpr auto length            = define( basis::length           , Ratio<1> );
-constexpr auto time              = define( basis::time             , Ratio<1> );
-constexpr auto current           = define( basis::current          , Ratio<1> );
-constexpr auto temperature       = define( basis::temperature      , Ratio<1> );
-constexpr auto amount            = define( basis::amount           , Ratio<1> );
-constexpr auto luminousIntensity = define( basis::luminousIntensity, Ratio<1> );
-constexpr auto planeAngle        = define( basis::planeAngle       , Ratio<1> );
-constexpr auto solidAngle        = define( basis::solidAngle       , Ratio<1> );
+DEFINE( mass );
+DEFINE( length );
+DEFINE( time );
+DEFINE( current );
+DEFINE( temperature );
+DEFINE( amount );
+DEFINE( luminousIntensity );
+DEFINE( planeAngle );
+DEFINE( solidAngle );
 
+#undef DEFINE
+  
 constexpr auto area = length * length;
 constexpr auto volume = area * length;
 constexpr auto velocity = length / time;
