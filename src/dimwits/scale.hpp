@@ -15,6 +15,12 @@ constexpr auto key( Prefix, BaseKey ){
 // !!!!!!!!!!!!!!!!!!!!!!!!
 // intentionally undefined
 // !!!!!!!!!!!!!!!!!!!!!!!!
+/*
+ * This overload is the best match if a user tries to add a 
+ * prefix to a prefix-ed unit, e.g. kilo(mega(gram))
+ * Because the overload isn't defined, doing so results in a 
+ * compilation error.
+ */
 template< typename Prefix, typename OtherPrefix, typename BaseKey >
 constexpr auto key( Prefix, Key<OtherPrefix, BaseKey> );
 
