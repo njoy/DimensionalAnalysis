@@ -22,7 +22,7 @@ inline constexpr double referenceUnitRatio( key::NAME##_tag ){		\
 static constexpr auto NAME =						\
   detail::definition< unit::Type >( unit::key::NAME, Ratio<1> );	\
  									\
-using LABEL = decltype(NAME);
+using LABEL = std::decay_t< decltype(NAME) >;
 
 #define DEFINE_BASIS_UNIT( NAME, DIMENSION, SYMBOL, LABEL )             \
   DEFINE_UNIT( NAME, DIMENSION, SYMBOL, LABEL, 1.0 )                    \
