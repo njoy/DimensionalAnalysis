@@ -1,7 +1,7 @@
 
 add_executable( dimwits.dimension.test
-                dimension.test.cpp
                 isBasis.test.cpp
+                dimension.test.cpp
                 operation.test.cpp )
 target_compile_options( dimwits.dimension.test PRIVATE ${${PREFIX}_common_flags}
 $<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>$<$<CONFIG:DEBUG>:

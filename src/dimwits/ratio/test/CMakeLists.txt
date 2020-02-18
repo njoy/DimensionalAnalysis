@@ -1,15 +1,15 @@
 
 add_executable( dimwits.ratio.test
-                add.test.cpp
-                divide.test.cpp
-                equality.test.cpp
-                greatestCommonFactor.test.cpp
-                less.test.cpp
                 make.test.cpp
-                multiply.test.cpp
-                ratio.test.cpp
                 reduce.test.cpp
-                subtract.test.cpp )
+                subtract.test.cpp
+                equality.test.cpp
+                less.test.cpp
+                multiply.test.cpp
+                add.test.cpp
+                ratio.test.cpp
+                greatestCommonFactor.test.cpp
+                divide.test.cpp )
 target_compile_options( dimwits.ratio.test PRIVATE ${${PREFIX}_common_flags}
 $<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>$<$<CONFIG:DEBUG>:
 ${${PREFIX}_DEBUG_flags}
