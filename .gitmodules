@@ -1,6 +1,0 @@
-[submodule "dependencies/hana-adapter"]
-	path = dependencies/hana-adapter
-	url = https://github.com/njoy/hana-adapter.git
-[submodule "dependencies/catch-adapter"]
-	path = dependencies/catch-adapter
-	url = https://github.com/njoy/catch-adapter.git
