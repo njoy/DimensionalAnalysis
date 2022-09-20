@@ -11,9 +11,9 @@ FetchContent_Declare( catch-adapter
     GIT_SHALLOW     TRUE
     )
 
-FetchContent_Declare( hana-adapter
-    GIT_REPOSITORY  https://github.com/njoy/hana-adapter
-    GIT_TAG         origin/master
+FetchContent_Declare( hana
+    GIT_REPOSITORY  https://github.com/boostorg/hana
+    GIT_TAG         v1.7.0
     GIT_SHALLOW     TRUE
     )
 
@@ -23,5 +23,5 @@ FetchContent_Declare( hana-adapter
 
 FetchContent_MakeAvailable(
     catch-adapter
-    hana-adapter
+    hana
     )

@@ -5,9 +5,9 @@ include( FetchContent )
 # Declare project dependencies
 #######################################################################
 
-FetchContent_Declare( hana-adapter
-    GIT_REPOSITORY  https://github.com/njoy/hana-adapter
-    GIT_TAG         f58e8973c9a614dc4f3720b5581a762c61bdbb40
+FetchContent_Declare( hana
+    GIT_REPOSITORY  https://github.com/boostorg/hana
+    GIT_TAG         07eadfb31eab29ca5548baae34e8d64e25a4c1a3 # tag: boost-1.75.0
     )
 
 FetchContent_Declare( catch-adapter
@@ -20,6 +20,6 @@ FetchContent_Declare( catch-adapter
 #######################################################################
 
 FetchContent_MakeAvailable(
-    hana-adapter
+    hana
     catch-adapter
     )
