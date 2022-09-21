@@ -13,7 +13,7 @@ FetchContent_Declare( catch-adapter
 
 FetchContent_Declare( hana
     GIT_REPOSITORY  https://github.com/boostorg/hana
-    GIT_TAG         v1.7.0
+    GIT_TAG         boost-1.77.0
     GIT_SHALLOW     TRUE
     )
 
