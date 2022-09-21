@@ -57,7 +57,7 @@ add_library( dimwits INTERFACE
 target_include_directories( dimwits INTERFACE src/ )
 target_link_libraries( dimwits
     INTERFACE catch-adapter
-    INTERFACE hana-adapter
+    INTERFACE hana
     )
 
 
@@ -69,6 +69,9 @@ if( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
 
     # unit testing
     if( dimwits_unit_tests )
+        configure_file( cmake/unit_testing_ignore.cmake
+                        "${PROJECT_BINARY_DIR}/CTestCustom.cmake"
+                        COPYONLY )
         include( cmake/unit_testing.cmake )
     endif()
 
